@@ -1,0 +1,73 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/intellistock_db}
+    username: ${DATABASE_USERNAME:intellistock_user}
+    password: ${DATABASE_PASSWORD:intellistock_password}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 60000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    default-schema: public
+    drop-first: false
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 3600000
+
+# Encryption Configuration
+encryption:
+  secret-key: ${ENCRYPTION_KEY}
+  algorithm: AES
+
+# AI Prediction Configuration
+ai:
+  prediction:
+    days-to-analyze: 30
+    confidence-threshold: 0.80
+    min-data-points: 15
+
+logging:
+  level:
+    root: WARN
+    com.logistics.intellistock: INFO
+    org.hibernate.SQL: WARN
+    org.springframework.security: WARN
+    liquibase: INFO
+  file:
+    name: logs/intellistock.log
+    max-size: 10MB
+    max-history: 30
+
+server:
+  error:
+    include-stacktrace: never
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
