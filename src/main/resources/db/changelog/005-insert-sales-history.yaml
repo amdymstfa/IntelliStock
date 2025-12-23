@@ -1,0 +1,234 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-insert-sales-history-sample
+      author: intellistock-team
+      comment: "Insert sample sales history for the last 90 days"
+      changes:
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-01" }
+              - column: { name: quantity_sold, valueNumeric: 5 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-02" }
+              - column: { name: quantity_sold, valueNumeric: 8 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-03" }
+              - column: { name: quantity_sold, valueNumeric: 7 }
+              - column: { name: day_of_week, value: "TUESDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-04" }
+              - column: { name: quantity_sold, valueNumeric: 6 }
+              - column: { name: day_of_week, value: "WEDNESDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-05" }
+              - column: { name: quantity_sold, valueNumeric: 9 }
+              - column: { name: day_of_week, value: "THURSDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        # Product 2 (iPhone) - New York - Stable high sales
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 2 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-01" }
+              - column: { name: quantity_sold, valueNumeric: 12 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 2 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-02" }
+              - column: { name: quantity_sold, valueNumeric: 15 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 2 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: sale_date, value: "2024-12-03" }
+              - column: { name: quantity_sold, valueNumeric: 14 }
+              - column: { name: day_of_week, value: "TUESDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        # Product 3 (TV) - Miami - Weekend spikes
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 3 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: sale_date, value: "2024-12-07" }
+              - column: { name: quantity_sold, valueNumeric: 8 }
+              - column: { name: day_of_week, value: "SATURDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 3 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: sale_date, value: "2024-12-08" }
+              - column: { name: quantity_sold, valueNumeric: 10 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 3 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: sale_date, value: "2024-12-09" }
+              - column: { name: quantity_sold, valueNumeric: 3 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        # Product 6 (Olive Oil) - LA - Consistent daily sales
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-01" }
+              - column: { name: quantity_sold, valueNumeric: 25 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-02" }
+              - column: { name: quantity_sold, valueNumeric: 28 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-03" }
+              - column: { name: quantity_sold, valueNumeric: 30 }
+              - column: { name: day_of_week, value: "TUESDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-04" }
+              - column: { name: quantity_sold, valueNumeric: 27 }
+              - column: { name: day_of_week, value: "WEDNESDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        # Product 8 (T-Shirt) - LA - Seasonal pattern
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 8 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-01" }
+              - column: { name: quantity_sold, valueNumeric: 18 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 8 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: sale_date, value: "2024-12-02" }
+              - column: { name: quantity_sold, valueNumeric: 20 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        # Product 9 (Running Shoes) - Chicago - Weekend demand
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 9 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: sale_date, value: "2024-12-07" }
+              - column: { name: quantity_sold, valueNumeric: 15 }
+              - column: { name: day_of_week, value: "SATURDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 9 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: sale_date, value: "2024-12-08" }
+              - column: { name: quantity_sold, valueNumeric: 18 }
+              - column: { name: day_of_week, value: "SUNDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+        - insert:
+            tableName: sales_history
+            columns:
+              - column: { name: product_id, valueNumeric: 9 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: sale_date, value: "2024-12-09" }
+              - column: { name: quantity_sold, valueNumeric: 8 }
+              - column: { name: day_of_week, value: "MONDAY" }
+              - column: { name: month, valueNumeric: 12 }
+              - column: { name: year, valueNumeric: 2024 }
+
+      rollback:
+        - delete:
+            tableName: sales_history
