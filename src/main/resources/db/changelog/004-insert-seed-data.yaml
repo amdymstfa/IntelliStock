@@ -1,0 +1,423 @@
+databaseChangeLog:
+  # ===========================================
+  # WAREHOUSES DATA
+  # ===========================================
+  - changeSet:
+      id: 010-insert-warehouses
+      author: intellistock-team
+      changes:
+        - insert:
+            tableName: warehouses
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: name, value: "New York Central Warehouse" }
+              - column: { name: city, value: "New York" }
+              - column: { name: address, value: "1250 Broadway Avenue" }
+              - column: { name: country, value: "USA" }
+              - column: { name: postal_code, value: "10001" }
+              - column: { name: phone, value: "+1-212-555-0101" }
+              - column: { name: email, value: "ny.warehouse@intellistock.com" }
+              - column: { name: capacity, valueNumeric: 50000 }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: warehouses
+            columns:
+              - column: { name: id, value: 2 }
+              - column: { name: name, value: "Los Angeles Distribution Center" }
+              - column: { name: city, value: "Los Angeles" }
+              - column: { name: address, value: "8500 Sunset Boulevard" }
+              - column: { name: country, value: "USA" }
+              - column: { name: postal_code, value: "90069" }
+              - column: { name: phone, value: "+1-323-555-0202" }
+              - column: { name: email, value: "la.warehouse@intellistock.com" }
+              - column: { name: capacity, valueNumeric: 45000 }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: warehouses
+            columns:
+              - column: { name: id, value: 3 }
+              - column: { name: name, value: "Chicago Logistics Hub" }
+              - column: { name: city, value: "Chicago" }
+              - column: { name: address, value: "350 North Michigan Avenue" }
+              - column: { name: country, value: "USA" }
+              - column: { name: postal_code, value: "60601" }
+              - column: { name: phone, value: "+1-312-555-0303" }
+              - column: { name: email, value: "chicago.warehouse@intellistock.com" }
+              - column: { name: capacity, valueNumeric: 40000 }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: warehouses
+            columns:
+              - column: { name: id, value: 4 }
+              - column: { name: name, value: "Miami Storage Facility" }
+              - column: { name: city, value: "Miami" }
+              - column: { name: address, value: "2750 Biscayne Boulevard" }
+              - column: { name: country, value: "USA" }
+              - column: { name: postal_code, value: "33137" }
+              - column: { name: phone, value: "+1-305-555-0404" }
+              - column: { name: email, value: "miami.warehouse@intellistock.com" }
+              - column: { name: capacity, valueNumeric: 35000 }
+              - column: { name: is_active, valueBoolean: true }
+
+  # ===========================================
+  # USERS DATA (password: Admin@123 / Manager@123 hashed with BCrypt)
+  # ===========================================
+  - changeSet:
+      id: 011-insert-users
+      author: intellistock-team
+      changes:
+        # ADMIN USER
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: login, value: "admin" }
+              - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
+              - column: { name: first_name, value: "John" }
+              - column: { name: last_name, value: "Administrator" }
+              - column: { name: email, value: "admin@intellistock.com" }
+              - column: { name: role, value: "ADMIN" }
+              - column: { name: is_active, valueBoolean: true }
+              - column: { name: warehouse_id, value: null }
+
+        # MANAGER - New York
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: 2 }
+              - column: { name: login, value: "manager.ny" }
+              - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
+              - column: { name: first_name, value: "Sarah" }
+              - column: { name: last_name, value: "Johnson" }
+              - column: { name: email, value: "sarah.johnson@intellistock.com" }
+              - column: { name: role, value: "MANAGER" }
+              - column: { name: is_active, valueBoolean: true }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+
+        # MANAGER - Los Angeles
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: 3 }
+              - column: { name: login, value: "manager.la" }
+              - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
+              - column: { name: first_name, value: "Michael" }
+              - column: { name: last_name, value: "Rodriguez" }
+              - column: { name: email, value: "michael.rodriguez@intellistock.com" }
+              - column: { name: role, value: "MANAGER" }
+              - column: { name: is_active, valueBoolean: true }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+
+        # MANAGER - Chicago
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: 4 }
+              - column: { name: login, value: "manager.chicago" }
+              - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
+              - column: { name: first_name, value: "Emily" }
+              - column: { name: last_name, value: "Chen" }
+              - column: { name: email, value: "emily.chen@intellistock.com" }
+              - column: { name: role, value: "MANAGER" }
+              - column: { name: is_active, valueBoolean: true }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+
+        # MANAGER - Miami
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: id, value: 5 }
+              - column: { name: login, value: "manager.miami" }
+              - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
+              - column: { name: first_name, value: "David" }
+              - column: { name: last_name, value: "Martinez" }
+              - column: { name: email, value: "david.martinez@intellistock.com" }
+              - column: { name: role, value: "MANAGER" }
+              - column: { name: is_active, valueBoolean: true }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+
+  # ===========================================
+  # PRODUCTS DATA (with encrypted purchase price and margin)
+  # Note: In real implementation, these will be encrypted by EncryptionService
+  # ===========================================
+  - changeSet:
+      id: 012-insert-products
+      author: intellistock-team
+      changes:
+        # ELECTRONICS CATEGORY
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 1 }
+              - column: { name: name, value: "Laptop Dell XPS 15" }
+              - column: { name: description, value: "High-performance laptop with Intel i7, 16GB RAM, 512GB SSD" }
+              - column: { name: category, value: "ELECTRONICS" }
+              - column: { name: sku, value: "ELEC-LAP-001" }
+              - column: { name: selling_price, value: "1499.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:1200.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:299.99" }
+              - column: { name: weight, value: "2.5" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 2 }
+              - column: { name: name, value: "iPhone 15 Pro" }
+              - column: { name: description, value: "Latest iPhone with A17 chip, 256GB storage" }
+              - column: { name: category, value: "ELECTRONICS" }
+              - column: { name: sku, value: "ELEC-PHO-002" }
+              - column: { name: selling_price, value: "1099.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:850.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:249.99" }
+              - column: { name: weight, value: "0.3" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 3 }
+              - column: { name: name, value: "Samsung 55-inch 4K TV" }
+              - column: { name: description, value: "Smart TV with HDR, 120Hz refresh rate" }
+              - column: { name: category, value: "ELECTRONICS" }
+              - column: { name: sku, value: "ELEC-TV-003" }
+              - column: { name: selling_price, value: "799.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:600.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:199.99" }
+              - column: { name: weight, value: "18.5" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        # FURNITURE CATEGORY
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 4 }
+              - column: { name: name, value: "Office Ergonomic Chair" }
+              - column: { name: description, value: "Adjustable office chair with lumbar support" }
+              - column: { name: category, value: "FURNITURE" }
+              - column: { name: sku, value: "FURN-CHR-001" }
+              - column: { name: selling_price, value: "349.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:200.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:149.99" }
+              - column: { name: weight, value: "25.0" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 5 }
+              - column: { name: name, value: "Standing Desk Electric" }
+              - column: { name: description, value: "Height-adjustable desk with memory settings" }
+              - column: { name: category, value: "FURNITURE" }
+              - column: { name: sku, value: "FURN-DSK-002" }
+              - column: { name: selling_price, value: "599.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:400.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:199.99" }
+              - column: { name: weight, value: "45.0" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        # FOOD CATEGORY
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 6 }
+              - column: { name: name, value: "Organic Olive Oil Premium" }
+              - column: { name: description, value: "Extra virgin olive oil from Italy, 1L bottle" }
+              - column: { name: category, value: "FOOD" }
+              - column: { name: sku, value: "FOOD-OIL-001" }
+              - column: { name: selling_price, value: "24.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:15.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:9.99" }
+              - column: { name: weight, value: "1.0" }
+              - column: { name: unit, value: "LITER" }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 7 }
+              - column: { name: name, value: "Organic Coffee Beans" }
+              - column: { name: description, value: "Arabica coffee beans from Colombia, 500g pack" }
+              - column: { name: category, value: "FOOD" }
+              - column: { name: sku, value: "FOOD-COF-002" }
+              - column: { name: selling_price, value: "18.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:12.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:6.99" }
+              - column: { name: weight, value: "0.5" }
+              - column: { name: unit, value: "KILOGRAM" }
+              - column: { name: is_active, valueBoolean: true }
+
+        # CLOTHING CATEGORY
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 8 }
+              - column: { name: name, value: "Men's Cotton T-Shirt" }
+              - column: { name: description, value: "100% organic cotton, available in multiple colors" }
+              - column: { name: category, value: "CLOTHING" }
+              - column: { name: sku, value: "CLOT-TSH-001" }
+              - column: { name: selling_price, value: "29.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:15.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:14.99" }
+              - column: { name: weight, value: "0.2" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 9 }
+              - column: { name: name, value: "Women's Running Shoes" }
+              - column: { name: description, value: "Lightweight running shoes with cushioned sole" }
+              - column: { name: category, value: "CLOTHING" }
+              - column: { name: sku, value: "CLOT-SHO-002" }
+              - column: { name: selling_price, value: "89.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:50.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:39.99" }
+              - column: { name: weight, value: "0.8" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+        # HOME & GARDEN
+        - insert:
+            tableName: products
+            columns:
+              - column: { name: id, value: 10 }
+              - column: { name: name, value: "Stainless Steel Cookware Set" }
+              - column: { name: description, value: "10-piece cookware set with non-stick coating" }
+              - column: { name: category, value: "HOME_GARDEN" }
+              - column: { name: sku, value: "HOME-COO-001" }
+              - column: { name: selling_price, value: "199.99" }
+              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:120.00" }
+              - column: { name: margin_encrypted, value: "ENCRYPTED:79.99" }
+              - column: { name: weight, value: "8.5" }
+              - column: { name: unit, value: "UNIT" }
+              - column: { name: is_active, valueBoolean: true }
+
+  # ===========================================
+  # STOCKS DATA - Initial inventory for all warehouses
+  # ===========================================
+  - changeSet:
+      id: 013-insert-stocks
+      author: intellistock-team
+      changes:
+        # New York Warehouse Stocks
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: quantity_available, valueNumeric: 150 }
+              - column: { name: alert_threshold, valueNumeric: 20 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 2 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: quantity_available, valueNumeric: 200 }
+              - column: { name: alert_threshold, valueNumeric: 30 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 3 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: quantity_available, valueNumeric: 80 }
+              - column: { name: alert_threshold, valueNumeric: 15 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 4 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: quantity_available, valueNumeric: 120 }
+              - column: { name: alert_threshold, valueNumeric: 25 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 5 }
+              - column: { name: warehouse_id, valueNumeric: 1 }
+              - column: { name: quantity_available, valueNumeric: 60 }
+              - column: { name: alert_threshold, valueNumeric: 10 }
+
+        # Los Angeles Warehouse Stocks
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 1 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: quantity_available, valueNumeric: 100 }
+              - column: { name: alert_threshold, valueNumeric: 20 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: quantity_available, valueNumeric: 500 }
+              - column: { name: alert_threshold, valueNumeric: 100 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 7 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: quantity_available, valueNumeric: 400 }
+              - column: { name: alert_threshold, valueNumeric: 80 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 8 }
+              - column: { name: warehouse_id, valueNumeric: 2 }
+              - column: { name: quantity_available, valueNumeric: 300 }
+              - column: { name: alert_threshold, valueNumeric: 50 }
+
+        # Chicago Warehouse Stocks
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 2 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: quantity_available, valueNumeric: 180 }
+              - column: { name: alert_threshold, valueNumeric: 30 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 9 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: quantity_available, valueNumeric: 250 }
+              - column: { name: alert_threshold, valueNumeric: 40 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 10 }
+              - column: { name: warehouse_id, valueNumeric: 3 }
+              - column: { name: quantity_available, valueNumeric: 90 }
+              - column: { name: alert_threshold, valueNumeric: 15 }
+
+        # Miami Warehouse Stocks
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 3 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: quantity_available, valueNumeric: 70 }
+              - column: { name: alert_threshold, valueNumeric: 15 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 6 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: quantity_available, valueNumeric: 450 }
+              - column: { name: alert_threshold, valueNumeric: 100 }
+        - insert:
+            tableName: stocks
+            columns:
+              - column: { name: product_id, valueNumeric: 8 }
+              - column: { name: warehouse_id, valueNumeric: 4 }
+              - column: { name: quantity_available, valueNumeric: 280 }
+              - column: { name: alert_threshold, valueNumeric: 50 }
