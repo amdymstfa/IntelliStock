@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-create-indexes
+      author: intellistock-team
+      changes:
+        # Users indexes
+        - createIndex:
+            indexName: idx_users_login
+            tableName: users
+            columns:
+              - column:
+                  name: login
+
+        - createIndex:
+            indexName: idx_users_email
+            tableName: users
+            columns:
+              - column:
+                  name: email
+
+        - createIndex:
+            indexName: idx_users_role
+            tableName: users
+            columns:
+              - column:
+                  name: role
+
+        - createIndex:
+            indexName: idx_users_warehouse_id
+            tableName: users
+            columns:
+              - column:
+                  name: warehouse_id
+
+        # Products indexes
+        - createIndex:
+            indexName: idx_products_sku
+            tableName: products
+            columns:
+              - column:
+                  name: sku
+
+        - createIndex:
+            indexName: idx_products_category
+            tableName: products
+            columns:
+              - column:
+                  name: category
+
+        # Stocks indexes
+        - createIndex:
+            indexName: idx_stocks_product_id
+            tableName: stocks
+            columns:
+              - column:
+                  name: product_id
+
+        - createIndex:
+            indexName: idx_stocks_warehouse_id
+            tableName: stocks
+            columns:
+              - column:
+                  name: warehouse_id
+
+        # Sales History indexes
+        - createIndex:
+            indexName: idx_sales_history_product_id
+            tableName: sales_history
+            columns:
+              - column:
+                  name: product_id
+
+        - createIndex:
+            indexName: idx_sales_history_warehouse_id
+            tableName: sales_history
+            columns:
+              - column:
+                  name: warehouse_id
+
+        - createIndex:
+            indexName: idx_sales_history_sale_date
+            tableName: sales_history
+            columns:
+              - column:
+                  name: sale_date
+
+        - createIndex:
+            indexName: idx_sales_history_year_month
+            tableName: sales_history
+            columns:
+              - column:
+                  name: year
+              - column:
+                  name: month
+
+        # Predictions indexes
+        - createIndex:
+            indexName: idx_predictions_product_id
+            tableName: predictions
+            columns:
+              - column:
+                  name: product_id
+
+        - createIndex:
+            indexName: idx_predictions_warehouse_id
+            tableName: predictions
+            columns:
+              - column:
+                  name: warehouse_id
+
+        - createIndex:
+            indexName: idx_predictions_prediction_date
+            tableName: predictions
+            columns:
+              - column:
+                  name: prediction_date
