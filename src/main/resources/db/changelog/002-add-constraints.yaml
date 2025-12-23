@@ -1,0 +1,84 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-add-foreign-keys
+      author: intellistock-team
+      changes:
+        # Users -> Warehouses FK
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: warehouse_id
+            constraintName: fk_users_warehouse
+            referencedTableName: warehouses
+            referencedColumnNames: id
+            onDelete: SET NULL
+            onUpdate: CASCADE
+
+        # Stocks -> Products FK
+        - addForeignKeyConstraint:
+            baseTableName: stocks
+            baseColumnNames: product_id
+            constraintName: fk_stocks_product
+            referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        # Stocks -> Warehouses FK
+        - addForeignKeyConstraint:
+            baseTableName: stocks
+            baseColumnNames: warehouse_id
+            constraintName: fk_stocks_warehouse
+            referencedTableName: warehouses
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        # Sales History -> Products FK
+        - addForeignKeyConstraint:
+            baseTableName: sales_history
+            baseColumnNames: product_id
+            constraintName: fk_sales_history_product
+            referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        # Sales History -> Warehouses FK
+        - addForeignKeyConstraint:
+            baseTableName: sales_history
+            baseColumnNames: warehouse_id
+            constraintName: fk_sales_history_warehouse
+            referencedTableName: warehouses
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        # Predictions -> Products FK
+        - addForeignKeyConstraint:
+            baseTableName: predictions
+            baseColumnNames: product_id
+            constraintName: fk_predictions_product
+            referencedTableName: products
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+        # Predictions -> Warehouses FK
+        - addForeignKeyConstraint:
+            baseTableName: predictions
+            baseColumnNames: warehouse_id
+            constraintName: fk_predictions_warehouse
+            referencedTableName: warehouses
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+
+  - changeSet:
+      id: 008-add-unique-constraints
+      author: intellistock-team
+      changes:
+        # Unique constraint: one stock record per product per warehouse
+        - addUniqueConstraint:
+            tableName: stocks
+            columnNames: product_id, warehouse_id
+            constraintName: uk_stocks_product_warehouse
