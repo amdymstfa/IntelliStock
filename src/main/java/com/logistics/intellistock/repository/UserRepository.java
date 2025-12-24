@@ -1,0 +1,30 @@
+package com.logistics.intellistock.repository;
+
+import com.logistics.intellistock.entity.User;
+import com.logistics.intellistock.entity.Warehouse;
+import com.logistics.intellistock.enums.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+
+  Optional<User> findByLogin(String login);
+
+  Optional<User> findByEmail(String email);
+
+  boolean existsByLogin(String login);
+
+  boolean existsByEmail(String email);
+
+  List<User> findByRole(Role role);
+
+  List<User> findByWarehouse(Warehouse warehouse);
+
+  List<User> findByIsActive(Boolean isActive);
+
+  Optional<User> findByLoginAndIsActive(String login, Boolean isActive);
+}
