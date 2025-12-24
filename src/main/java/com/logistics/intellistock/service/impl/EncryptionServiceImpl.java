@@ -13,13 +13,13 @@ import java.util.Base64;
 @Slf4j
 @Service
 public class EncryptionServiceImpl implements EncryptionService {
-    
+
     @Value("${encryption.secret-key}")
     private String secretKey;
-    
+
     @Value("${encryption.algorithm:AES}")
     private String algorithm;
-    
+
     @Override
     public String encrypt(String data) throws Exception {
         try {
@@ -36,7 +36,7 @@ public class EncryptionServiceImpl implements EncryptionService {
             throw new Exception("Encryption failed", e);
         }
     }
-    
+
     @Override
     public String decrypt(String encryptedData) throws Exception {
         try {
@@ -54,7 +54,7 @@ public class EncryptionServiceImpl implements EncryptionService {
             throw new Exception("Decryption failed", e);
         }
     }
-    
+
     private String padKey(String key) {
         if (key.length() < 16) {
             return String.format("%-16s", key).replace(' ', '0');
