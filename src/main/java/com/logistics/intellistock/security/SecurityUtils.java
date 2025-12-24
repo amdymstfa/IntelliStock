@@ -1,15 +1,13 @@
 package com.logistics.intellistock.security;
 
 import com.logistics.intellistock.entity.User;
-import com.logistics.intellistock.entity.enums.Role;
-import com.logistics.intellistock.core.exception.UnauthorizedException;
+import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.exception.UnauthorizedException;
 import com.logistics.intellistock.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -17,44 +15,43 @@ public class SecurityUtils {
 
   private final UserRepository userRepository;
 
-  public UserPrincipal getCurrentUser() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (auth == null || !auth.isAuthenticated()) {
+    if (authentication == null || !authentication.isAuthenticated()) {
       throw new UnauthorizedException("No authenticated user found");
     }
 
-    UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-
-
-    return userPrincipal;
+    String username = authentication.getName();
+    return userRepository.findByLogin(username)
+      .orElseThrow(() -> new UnauthorizedException("User not found"));
   }
 
   public boolean isAdmin() {
-    UserPrincipal principal = getCurrentUser();
-    return principal.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"));
+    User user = getCurrentUser();
+    return user.getRole() == Role.ADMIN;
   }
 
   public boolean isManager() {
-    UserPrincipal principal = getCurrentUser();
-    return principal.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("MANAGER"));
+    User user = getCurrentUser();
+    return user.getRole() == Role.MANAGER;
   }
 
   public boolean hasAccessToWarehouse(Long warehouseId) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    User user = getCurrentUser();
 
-    if (auth == null || !auth.isAuthenticated()) {
-      return false;
+    // Admin has access to all warehouses
+    if (user.getRole() == Role.ADMIN) {
+      return true;
     }
 
-    UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+    // Manager can only access their assigned warehouse
+    if (user.getRole() == Role.MANAGER) {
+      return user.getWarehouse() != null &&
+        user.getWarehouse().getId().equals(warehouseId);
+    }
 
-    boolean isAdmin = userPrincipal.getAuthorities().stream()
-            .anyMatch(a -> a.getAuthority().equals("ADMIN"));
-
-    if (isAdmin) return true;
-
-    return Objects.equals(userPrincipal.getWarehouseId(), warehouseId);
+    return false;
   }
 
   public void validateWarehouseAccess(Long warehouseId) {
