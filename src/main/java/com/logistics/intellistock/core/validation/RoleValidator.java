@@ -1,4 +1,4 @@
-package com.logistics.intellistock.validation;
+package com.logistics.intellistock.core.validation;
 
 import com.logistics.intellistock.enums.Role;
 import jakarta.validation.ConstraintValidator;

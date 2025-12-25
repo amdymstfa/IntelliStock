@@ -1,4 +1,4 @@
-package com.logistics.intellistock.validation;
+package com.logistics.intellistock.core.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

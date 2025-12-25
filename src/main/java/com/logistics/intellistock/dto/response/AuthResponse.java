@@ -7,16 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class LoginResponse {
+public class AuthResponse {
     private String token;
     private String type = "Bearer";
-    private Long userId;
-    private String login;
+    private String username;
     private String email;
     private Role role;
+
     private Long warehouseId;
     private String warehouseName;
 }

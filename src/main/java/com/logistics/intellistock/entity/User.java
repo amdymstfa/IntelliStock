@@ -21,17 +21,11 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
-  @Column(nullable = false, unique = true, length = 50)
-  private String login;
-
   @Column(nullable = false, length = 255)
   private String password;
 
   @Column(nullable = false, length = 50)
-  private String firstName;
-
-  @Column(nullable = false, length = 50)
-  private String lastName;
+  private String username;
 
   @Column(nullable = false, unique = true, length = 100)
   private String email;
