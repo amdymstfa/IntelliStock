@@ -1,5 +1,5 @@
 
-package com.logistics.intellistock.enums;
+package com.logistics.intellistock.entity.enums;
 
 public enum Category {
   ELECTRONICS,

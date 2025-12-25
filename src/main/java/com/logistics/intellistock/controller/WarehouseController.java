@@ -37,7 +37,7 @@ public class WarehouseController {
       warehouses = warehouseService.getAllWarehouses();
     } else {
       // Manager can only see their assigned warehouse
-      Long warehouseId = securityUtils.getCurrentUser().getWarehouse().getId();
+      Long warehouseId = securityUtils.getCurrentUser().getWarehouseId();
       WarehouseResponse warehouse = warehouseService.getWarehouseById(warehouseId);
       warehouses = List.of(warehouse);
     }

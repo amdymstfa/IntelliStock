@@ -1,18 +1,13 @@
 package com.logistics.intellistock.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginRequest {
-    
-    @NotBlank(message = "Login is required")
-    private String login;
-    
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "Login required")
+    private String username;
+
+    @NotBlank(message = "Password required")
     private String password;
 }

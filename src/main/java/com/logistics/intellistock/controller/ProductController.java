@@ -5,7 +5,7 @@ import com.logistics.intellistock.dto.request.UpdateProductRequest;
 import com.logistics.intellistock.dto.response.ApiResponse;
 import com.logistics.intellistock.dto.response.ProductAdminResponse;
 import com.logistics.intellistock.dto.response.ProductResponse;
-import com.logistics.intellistock.enums.Category;
+import com.logistics.intellistock.entity.enums.Category;
 import com.logistics.intellistock.security.SecurityUtils;
 import com.logistics.intellistock.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;

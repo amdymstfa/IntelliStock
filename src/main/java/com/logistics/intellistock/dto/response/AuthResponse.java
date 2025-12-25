@@ -1,22 +1,20 @@
 package com.logistics.intellistock.dto.response;
 
-import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class LoginResponse {
+public class AuthResponse {
     private String token;
     private String type = "Bearer";
-    private Long userId;
-    private String login;
+    private String username;
     private String email;
     private Role role;
+
     private Long warehouseId;
     private String warehouseName;
 }

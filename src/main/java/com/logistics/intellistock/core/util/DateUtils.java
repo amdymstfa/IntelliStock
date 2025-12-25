@@ -1,4 +1,4 @@
-package com.logistics.intellistock.util;
+package com.logistics.intellistock.core.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

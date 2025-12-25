@@ -1,4 +1,4 @@
-package com.logistics.intellistock.exception;
+package com.logistics.intellistock.core.exception;
 
 import com.logistics.intellistock.dto.response.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;

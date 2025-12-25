@@ -1,4 +1,4 @@
-package com.logistics.intellistock.exception;
+package com.logistics.intellistock.core.exception;
 
 public class StockException extends RuntimeException {
 
