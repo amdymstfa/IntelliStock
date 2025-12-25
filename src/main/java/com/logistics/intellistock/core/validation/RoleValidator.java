@@ -1,6 +1,6 @@
 package com.logistics.intellistock.core.validation;
 
-import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.entity.enums.Role;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

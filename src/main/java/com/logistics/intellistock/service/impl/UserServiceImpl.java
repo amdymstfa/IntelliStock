@@ -3,7 +3,7 @@ package com.logistics.intellistock.service.impl;
 import com.logistics.intellistock.dto.response.UserResponse;
 import com.logistics.intellistock.entity.User;
 import com.logistics.intellistock.entity.Warehouse;
-import com.logistics.intellistock.exception.ResourceNotFoundException;
+import com.logistics.intellistock.core.exception.ResourceNotFoundException;
 import com.logistics.intellistock.mapper.UserMapper;
 import com.logistics.intellistock.repository.UserRepository;
 import com.logistics.intellistock.repository.WarehouseRepository;
@@ -47,11 +47,8 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
-    if (updatedUser.getFirstName() != null) {
-      user.setFirstName(updatedUser.getFirstName());
-    }
-    if (updatedUser.getLastName() != null) {
-      user.setLastName(updatedUser.getLastName());
+    if (updatedUser.getUsername() != null) {
+      user.setUsername(updatedUser.getUsername());
     }
     if (updatedUser.getEmail() != null) {
       user.setEmail(updatedUser.getEmail());
@@ -61,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     User saved = userRepository.save(user);
-    log.info("User updated successfully: {}", saved.getLogin());
+    log.info("User updated successfully: {}", saved.getUsername());
 
     return userMapper.toResponse(saved);
   }
@@ -77,7 +74,7 @@ public class UserServiceImpl implements UserService {
     user.setIsActive(false);
     userRepository.save(user);
 
-    log.info("User deactivated successfully: {}", user.getLogin());
+    log.info("User deactivated successfully: {}", user.getUsername());
   }
 
   @Override

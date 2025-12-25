@@ -2,8 +2,7 @@
 package com.logistics.intellistock.repository;
 
 import com.logistics.intellistock.entity.Product;
-import com.logistics.intellistock.entity.Warehouse;
-import com.logistics.intellistock.enums.Category;
+import com.logistics.intellistock.entity.enums.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

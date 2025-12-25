@@ -4,7 +4,7 @@ import com.logistics.intellistock.dto.request.CreateProductRequest;
 import com.logistics.intellistock.dto.request.UpdateProductRequest;
 import com.logistics.intellistock.dto.response.ProductAdminResponse;
 import com.logistics.intellistock.dto.response.ProductResponse;
-import com.logistics.intellistock.enums.Category;
+import com.logistics.intellistock.entity.enums.Category;
 
 import java.util.List;
 

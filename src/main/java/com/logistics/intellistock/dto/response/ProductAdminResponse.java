@@ -1,7 +1,7 @@
 package com.logistics.intellistock.dto.response;
 
-import com.logistics.intellistock.enums.Category;
-import com.logistics.intellistock.enums.Unit;
+import com.logistics.intellistock.entity.enums.Category;
+import com.logistics.intellistock.entity.enums.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

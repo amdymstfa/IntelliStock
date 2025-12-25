@@ -1,4 +1,4 @@
-package com.logistics.intellistock.service.impl;
+package com.logistics.intellistock.security;
 
 import com.logistics.intellistock.service.EncryptionService;
 import lombok.extern.slf4j.Slf4j;

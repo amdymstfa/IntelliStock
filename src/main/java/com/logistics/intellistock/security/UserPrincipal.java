@@ -1,6 +1,7 @@
 package com.logistics.intellistock.security;
 
 import com.logistics.intellistock.entity.User;
+import com.logistics.intellistock.entity.Warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Builder
@@ -19,9 +21,10 @@ import java.util.List;
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private String id;
+    private Long id;
     private String username;
     private String password;
+    private Long warehouseId;
     private boolean active;
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -34,6 +37,7 @@ public class UserPrincipal implements UserDetails {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .active(user.getIsActive())
+                .warehouseId(Optional.ofNullable(user.getWarehouse()).map(Warehouse::getId).orElse(null))
                 .authorities(authorities)
                 .build();
     }
@@ -63,4 +67,5 @@ public class UserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
 }

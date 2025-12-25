@@ -5,10 +5,10 @@ import com.logistics.intellistock.dto.request.UpdateProductRequest;
 import com.logistics.intellistock.dto.response.ProductAdminResponse;
 import com.logistics.intellistock.dto.response.ProductResponse;
 import com.logistics.intellistock.entity.Product;
-import com.logistics.intellistock.enums.Category;
-import com.logistics.intellistock.enums.Unit;
-import com.logistics.intellistock.exception.DuplicateResourceException;
-import com.logistics.intellistock.exception.ResourceNotFoundException;
+import com.logistics.intellistock.entity.enums.Category;
+import com.logistics.intellistock.entity.enums.Unit;
+import com.logistics.intellistock.core.exception.DuplicateResourceException;
+import com.logistics.intellistock.core.exception.ResourceNotFoundException;
 import com.logistics.intellistock.mapper.ProductMapper;
 import com.logistics.intellistock.repository.ProductRepository;
 import com.logistics.intellistock.service.impl.ProductServiceImpl;
@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
