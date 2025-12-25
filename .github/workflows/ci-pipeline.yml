@@ -3,10 +3,11 @@ name: intelliStock CI
 on:
   push:
     branches:
-      - [ "develop", "main" ]
+      - "develop"
+      - "main"
   pull_request:
     branches:
-      - [ "develop" ]
+      - "develop"
 
 jobs:
   build-and-test:
