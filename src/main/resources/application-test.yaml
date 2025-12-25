@@ -28,7 +28,7 @@ spring:
 
 # JWT Configuration for tests
 jwt:
-  secret: test-secret-key-intellistock-2024-for-testing-purposes-only-minimum-256-bits
+  secret: ${TEST_JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
   expiration: 3600000
 
 # Encryption Configuration for tests
