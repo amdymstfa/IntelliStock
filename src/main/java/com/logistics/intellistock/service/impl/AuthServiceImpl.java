@@ -86,11 +86,6 @@ public class AuthServiceImpl implements AuthService {
         return mapper.toAuthResponse(savedUser, token);
     }
 
-    @Override
-    public AuthResponse refreshToken(String oldToken) {
-        return null;
-    }
-
     private User getUserByUsername(String username) throws Exception {
         return repo.findByUsername(username)
                 .orElseThrow(() -> new Exception("User not found with username: " + username));
