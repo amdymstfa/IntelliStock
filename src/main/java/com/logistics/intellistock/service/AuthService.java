@@ -8,5 +8,4 @@ import com.logistics.intellistock.dto.response.UserResponse;
 public interface AuthService {
     AuthResponse login(LoginRequest request);
     AuthResponse register(RegisterRequest request);
-    AuthResponse refreshToken(String oldToken);
 }
