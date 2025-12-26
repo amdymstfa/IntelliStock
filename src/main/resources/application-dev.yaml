@@ -59,6 +59,11 @@ ai:
     confidence-threshold: 0.75
     min-data-points: 10
 
+  google:
+    generative:
+      api-key: ${GEMINI_API_KEY}
+      model: gemini-pro
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
