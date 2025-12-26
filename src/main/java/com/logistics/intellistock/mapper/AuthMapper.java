@@ -3,7 +3,7 @@ package com.logistics.intellistock.mapper;
 import com.logistics.intellistock.dto.request.RegisterRequest;
 import com.logistics.intellistock.dto.response.AuthResponse;
 import com.logistics.intellistock.entity.User;
-import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.entity.enums.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
