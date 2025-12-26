@@ -1,7 +1,7 @@
 package com.logistics.intellistock.entity;
 
-import com.logistics.intellistock.enums.Category;
-import com.logistics.intellistock.enums.Unit;
+import com.logistics.intellistock.entity.enums.Category;
+import com.logistics.intellistock.entity.enums.Unit;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

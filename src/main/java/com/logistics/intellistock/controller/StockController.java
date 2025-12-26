@@ -56,7 +56,7 @@ public class StockController {
       lowStocks = stockService.getLowStockItems();
     } else {
       // Manager sees only their warehouse's low stocks
-      Long warehouseId = securityUtils.getCurrentUser().getWarehouse().getId();
+      Long warehouseId = securityUtils.getCurrentUser().getWarehouseId();
       lowStocks = stockService.getLowStockItemsByWarehouse(warehouseId);
     }
 

@@ -74,7 +74,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: login
+                  name: username
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
@@ -82,16 +82,6 @@ databaseChangeLog:
               - column:
                   name: password
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: first_name
-                  type: VARCHAR(50)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: last_name
-                  type: VARCHAR(50)
                   constraints:
                     nullable: false
               - column:

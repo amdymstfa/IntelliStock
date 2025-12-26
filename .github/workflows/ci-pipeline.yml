@@ -3,29 +3,30 @@ name: intelliStock CI
 on:
   push:
     branches:
-      - develop
+      - "develop"
+      - "main"
   pull_request:
     branches:
-      - develop
+      - "develop"
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_DB: intellistock_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    #    services:
+    #      postgres:
+    #        image: postgres:15
+    #        env:
+    #          POSTGRES_DB: intellistock_db
+    #          POSTGRES_USER: postgres
+    #          POSTGRES_PASSWORD: password
+    #        ports:
+    #          - 5432:5432
+    #        options: >-
+    #          --health-cmd pg_isready
+    #          --health-interval 10s
+    #          --health-timeout 5s
+    #          --health-retries 5
 
     steps:
       - name: Checkout code
@@ -39,8 +40,9 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn clean verify
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/intellistock_db
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: password
+        run: |
+          export TEST_JWT=$(openssl rand -base64 32)
+          mvn clean verify -Djwt.secret=$TEST_JWT
+#        env:
+#          TEST_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#          TEST_ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}

@@ -1,6 +1,6 @@
 package com.logistics.intellistock.dto.response;
 
-import com.logistics.intellistock.enums.DayOfWeek;
+import com.logistics.intellistock.entity.enums.DayOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
