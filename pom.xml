@@ -40,7 +40,12 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+      <!-- Spring AI OpenAI -->
+      <dependency>
+          <groupId>org.springframework.ai</groupId>
+          <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+          <version>1.0.0-M6</version>
+      </dependency>
     <!-- Spring Data JPA - MANQUANT -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
