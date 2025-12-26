@@ -1,6 +1,6 @@
 package com.logistics.intellistock.dto.response;
 
-import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

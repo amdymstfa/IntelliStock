@@ -1,6 +1,10 @@
 spring:
+  config:
+    activate:
+      on-profile: test
+
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -8,7 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -17,23 +21,34 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
 
-  # Disable Liquibase in tests
   liquibase:
     enabled: false
 
-# Test encryption config
+# JWT Configuration for tests
+jwt:
+  secret: c3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXM # dummy key
+  expiration: 3600000
+
+# Encryption Configuration for tests
 encryption:
   secret-key: test-encryption-key-32-chars!!
   algorithm: AES
 
-# Test JWT config (not used in core tests)
-jwt:
-  secret: test-secret-key
-  expiration: 3600000
+# AI Prediction Configuration for tests
+ai:
+  prediction:
+    days-to-analyze: 30
+    confidence-threshold: 0.70
+    min-data-points: 5
 
 logging:
   level:
     root: WARN
     com.logistics.intellistock: DEBUG
     org.hibernate.SQL: DEBUG
+    org.springframework.security: INFO
+
+server:
+  port: 0

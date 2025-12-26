@@ -1,6 +1,6 @@
 package com.logistics.intellistock.service;
 
 public interface EncryptionService {
-    String encrypt(String data) throws Exception;
-    String decrypt(String encryptedData) throws Exception;
+    public String encrypt(String data) throws Exception;
+    public String decrypt(String encryptedData) throws Exception;
 }

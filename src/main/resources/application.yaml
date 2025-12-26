@@ -1,8 +1,8 @@
 spring:
-  profiles:
-    active: dev
   application:
     name: intellistock
+  profiles:
+    active: dev
 
 server:
   port: 8080

@@ -1,7 +1,7 @@
 package com.logistics.intellistock.dto.request;
 
-import com.logistics.intellistock.enums.Category;
-import com.logistics.intellistock.enums.Unit;
+import com.logistics.intellistock.entity.enums.Category;
+import com.logistics.intellistock.entity.enums.Unit;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

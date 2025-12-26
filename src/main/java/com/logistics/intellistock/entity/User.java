@@ -1,6 +1,6 @@
 package com.logistics.intellistock.entity;
 
-import com.logistics.intellistock.enums.Role;
+import com.logistics.intellistock.entity.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,16 +22,10 @@ public class User {
   private Long id;
 
   @Column(nullable = false, unique = true, length = 50)
-  private String login;
+  private String username;
 
   @Column(nullable = false, length = 255)
   private String password;
-
-  @Column(nullable = false, length = 50)
-  private String firstName;
-
-  @Column(nullable = false, length = 50)
-  private String lastName;
 
   @Column(nullable = false, unique = true, length = 100)
   private String email;
