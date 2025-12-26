@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 @Slf4j
@@ -17,20 +19,26 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Value("${encryption.secret-key}")
     private String secretKey;
 
-    @Value("${encryption.algorithm:AES}")
-    private String algorithm;
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
 
     @Override
     public String encrypt(String data) throws Exception {
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(
-                    padKey(secretKey).getBytes(StandardCharsets.UTF_8),
-                    algorithm
-            );
-            Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-            byte[] encrypted = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
-            return Base64.getEncoder().encodeToString(encrypted);
+            byte[] iv = new byte[16];
+            new SecureRandom().nextBytes(iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+
+            byte[] cipherText = cipher.doFinal(data.getBytes());
+
+            byte[] combined = new byte[iv.length + cipherText.length];
+            System.arraycopy(iv, 0, combined, 0, iv.length);
+            System.arraycopy(cipherText, 0, combined, iv.length, cipherText.length);
+
+            return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
             log.error("Error encrypting data: {}", e.getMessage());
             throw new Exception("Encryption failed", e);
@@ -40,27 +48,24 @@ public class EncryptionServiceImpl implements EncryptionService {
     @Override
     public String decrypt(String encryptedData) throws Exception {
         try {
-            SecretKeySpec keySpec = new SecretKeySpec(
-                    padKey(secretKey).getBytes(StandardCharsets.UTF_8),
-                    algorithm
-            );
-            Cipher cipher = Cipher.getInstance(algorithm);
-            cipher.init(Cipher.DECRYPT_MODE, keySpec);
-            byte[] decoded = Base64.getDecoder().decode(encryptedData);
-            byte[] decrypted = cipher.doFinal(decoded);
-            return new String(decrypted, StandardCharsets.UTF_8);
+            byte[] combined = Base64.getDecoder().decode(encryptedData);
+
+            byte[] iv = new byte[16];
+            System.arraycopy(combined, 0, iv, 0, iv.length);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            int cipherTextLen = combined.length - iv.length;
+            byte[] cipherText = new byte[cipherTextLen];
+            System.arraycopy(combined, iv.length, cipherText, 0, cipherTextLen);
+
+            SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+
+            return new String(cipher.doFinal(cipherText));
         } catch (Exception e) {
             log.error("Error decrypting data: {}", e.getMessage());
             throw new Exception("Decryption failed", e);
         }
-    }
-
-    private String padKey(String key) {
-        if (key.length() < 16) {
-            return String.format("%-16s", key).replace(' ', '0');
-        } else if (key.length() > 16) {
-            return key.substring(0, 16);
-        }
-        return key;
     }
 }
