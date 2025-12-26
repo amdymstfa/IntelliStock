@@ -1,5 +1,6 @@
 package com.logistics.intellistock.entity;
 
+import com.logistics.intellistock.core.converter.EncryptionConverter;
 import com.logistics.intellistock.entity.enums.Category;
 import com.logistics.intellistock.entity.enums.Unit;
 import jakarta.persistence.*;
@@ -12,8 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,14 +36,17 @@ public class Product {
   @Column(nullable = false, unique = true, length = 50)
   private String sku;
 
+
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal sellingPrice;
 
+  @Convert(converter = EncryptionConverter.class)
   @Column(nullable = false, columnDefinition = "TEXT")
-  private String purchasePriceEncrypted;
+  private String purchasePrice;
 
+  @Convert(converter = EncryptionConverter.class)
   @Column(columnDefinition = "TEXT")
-  private String marginEncrypted;
+  private String margin;
 
   @Column(precision = 10, scale = 2)
   private BigDecimal weight;
