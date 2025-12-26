@@ -59,6 +59,7 @@ class ProductServiceTest {
                 .sellingPrice(new BigDecimal("1500.00"))
                 .purchasePrice(new BigDecimal("1200.00"))
                 .margin(new BigDecimal("300.00"))
+                .category(Category.ELECTRONICS)
                 .isActive(true)
                 .build();
 
@@ -81,6 +82,7 @@ class ProductServiceTest {
                 .id(1L)
                 .name("Test Laptop")
                 .sku("ELEC-LAP-001")
+                .category(Category.ELECTRONICS)
                 .build();
 
         adminResponse = ProductAdminResponse.builder()
