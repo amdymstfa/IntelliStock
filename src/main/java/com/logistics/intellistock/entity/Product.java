@@ -42,11 +42,11 @@ public class Product {
 
   @Convert(converter = EncryptionConverter.class)
   @Column(nullable = false, columnDefinition = "TEXT")
-  private String purchasePrice;
+  private BigDecimal purchasePrice;
 
   @Convert(converter = EncryptionConverter.class)
   @Column(columnDefinition = "TEXT")
-  private String margin;
+  private BigDecimal margin;
 
   @Column(precision = 10, scale = 2)
   private BigDecimal weight;
