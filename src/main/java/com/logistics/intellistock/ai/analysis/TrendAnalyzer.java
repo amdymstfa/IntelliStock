@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TrendAnalyzer {
 
-
     public double calculateTrendCoefficient(List<SalesHistory> salesHistory) {
         if (salesHistory == null || salesHistory.size() < 7) {
             log.debug("Données insuffisantes pour l'analyse de tendance");
@@ -39,19 +38,17 @@ public class TrendAnalyzer {
         double avg2 = calculatePeriodAverage(secondPeriod);
         double avg3 = calculatePeriodAverage(thirdPeriod);
 
-        double slope1to2 = (avg2 - avg1) / avg1;
-        double slope2to3 = (avg3 - avg2) / avg2;
+        double slope1to2 = (avg1 > 0) ? (avg2 - avg1) / avg1 : 0.0;
+        double slope2to3 = (avg2 > 0) ? (avg3 - avg2) / avg2 : 0.0;
 
         double weightedSlope = (slope1to2 * 0.4) + (slope2to3 * 0.6);
-
         double trendCoefficient = 1.0 + weightedSlope;
 
-        log.debug("Coefficient de tendance calculé: {:.3f} (pentes: {:.3f}, {:.3f})",
+        log.debug("Coefficient de tendance calculé: {} (pentes: {}, {})",
                 trendCoefficient, slope1to2, slope2to3);
 
         return trendCoefficient;
     }
-
 
     public String determineTrendDirection(List<SalesHistory> salesHistory) {
         double coefficient = calculateTrendCoefficient(salesHistory);
@@ -69,7 +66,6 @@ public class TrendAnalyzer {
         }
     }
 
-
     public double calculateLinearRegressionSlope(List<SalesHistory> salesHistory) {
         if (salesHistory.size() < 2) {
             return 0.0;
@@ -79,20 +75,18 @@ public class TrendAnalyzer {
                 .sorted(Comparator.comparing(SalesHistory::getSaleDate))
                 .collect(Collectors.toList());
 
-
         LocalDate firstDate = sortedData.get(0).getSaleDate();
         List<Double> xValues = new ArrayList<>();
         List<Double> yValues = new ArrayList<>();
 
         for (SalesHistory sale : sortedData) {
-            long daysBetween = firstDate.until(sale.getSaleDate()).getDays();
+            long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(firstDate, sale.getSaleDate());
             xValues.add((double) daysBetween);
             yValues.add((double) sale.getQuantitySold());
         }
 
         return calculateSlope(xValues, yValues);
     }
-
 
     public List<LocalDate> detectTrendBreaks(List<SalesHistory> salesHistory, double threshold) {
         List<LocalDate> breakPoints = new ArrayList<>();
@@ -104,7 +98,6 @@ public class TrendAnalyzer {
         List<SalesHistory> sortedData = salesHistory.stream()
                 .sorted(Comparator.comparing(SalesHistory::getSaleDate))
                 .collect(Collectors.toList());
-
 
         int windowSize = Math.min(7, sortedData.size() / 3);
 
@@ -120,7 +113,7 @@ public class TrendAnalyzer {
 
                 if (change > threshold) {
                     breakPoints.add(sortedData.get(i).getSaleDate());
-                    log.info("Rupture de tendance détectée à la date {}: changement de {:.1f}%",
+                    log.info("Rupture de tendance détectée à la date {}: changement de {}%",
                             sortedData.get(i).getSaleDate(), change * 100);
                 }
             }
@@ -128,7 +121,6 @@ public class TrendAnalyzer {
 
         return breakPoints;
     }
-
 
     private double calculatePeriodAverage(List<SalesHistory> periodData) {
         if (periodData.isEmpty()) {
@@ -140,7 +132,6 @@ public class TrendAnalyzer {
                 .average()
                 .orElse(0.0);
     }
-
 
     private double calculateSlope(List<Double> xValues, List<Double> yValues) {
         int n = xValues.size();
@@ -167,7 +158,6 @@ public class TrendAnalyzer {
         return numerator / denominator;
     }
 
-
     public double calculateTrendStrength(List<SalesHistory> salesHistory) {
         if (salesHistory.size() < 3) {
             return 0.0;
@@ -177,20 +167,18 @@ public class TrendAnalyzer {
                 .sorted(Comparator.comparing(SalesHistory::getSaleDate))
                 .collect(Collectors.toList());
 
-
         LocalDate firstDate = sortedData.get(0).getSaleDate();
         List<Double> xValues = new ArrayList<>();
         List<Double> yValues = new ArrayList<>();
 
         for (SalesHistory sale : sortedData) {
-            long daysBetween = firstDate.until(sale.getSaleDate()).getDays();
+            long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(firstDate, sale.getSaleDate());
             xValues.add((double) daysBetween);
             yValues.add((double) sale.getQuantitySold());
         }
 
         return calculateRSquared(xValues, yValues);
     }
-
 
     private double calculateRSquared(List<Double> xValues, List<Double> yValues) {
         double slope = calculateSlope(xValues, yValues);

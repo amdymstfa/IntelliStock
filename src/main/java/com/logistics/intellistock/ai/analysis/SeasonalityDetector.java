@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SeasonalityDetector {
 
-
     public Map<String, Double> detectSeasonality(List<SalesHistory> salesHistoryList) {
         if (salesHistoryList == null || salesHistoryList.isEmpty()) {
             log.warn("Aucune donnée de vente disponible pour l'analyse de saisonnalité");
@@ -20,17 +19,13 @@ public class SeasonalityDetector {
         }
 
         Map<String, Double> seasonalityFactors = new HashMap<>();
-
         seasonalityFactors.putAll(analyzeWeeklyPattern(salesHistoryList));
-
         seasonalityFactors.putAll(analyzeMonthlyPattern(salesHistoryList));
-
         seasonalityFactors.putAll(detectPeaks(salesHistoryList));
 
         log.debug("Analyse de saisonnalité terminée: {} facteurs détectés", seasonalityFactors.size());
         return seasonalityFactors;
     }
-
 
     private Map<String, Double> analyzeWeeklyPattern(List<SalesHistory> salesHistoryList) {
         Map<String, Double> weeklyFactors = new HashMap<>();
@@ -63,7 +58,6 @@ public class SeasonalityDetector {
         return weeklyFactors;
     }
 
-
     private Map<String, Double> analyzeMonthlyPattern(List<SalesHistory> salesHistoryList) {
         Map<String, Double> monthlyFactors = new HashMap<>();
 
@@ -95,7 +89,6 @@ public class SeasonalityDetector {
         return monthlyFactors;
     }
 
-
     private Map<String, Double> detectPeaks(List<SalesHistory> salesHistoryList) {
         Map<String, Double> peaks = new HashMap<>();
 
@@ -124,7 +117,6 @@ public class SeasonalityDetector {
         return peaks;
     }
 
-
     private double calculateStdDev(List<Integer> values, double mean) {
         if (values.size() <= 1) {
             return 0.0;
@@ -137,7 +129,6 @@ public class SeasonalityDetector {
         return Math.sqrt(variance);
     }
 
-
     public String getSeasonalityPattern(List<SalesHistory> salesHistoryList) {
         Map<String, Double> factors = detectSeasonality(salesHistoryList);
 
@@ -148,7 +139,7 @@ public class SeasonalityDetector {
         Optional<Map.Entry<String, Double>> maxEntry = factors.entrySet().stream()
                 .max(Map.Entry.comparingByValue());
 
-        if (maxEntry.isPresent() || maxEntry.get().getValue() <= 1.0) {
+        if (!maxEntry.isPresent() || maxEntry.get().getValue() <= 1.0) {
             return "STABLE";
         }
 
@@ -163,7 +154,6 @@ public class SeasonalityDetector {
 
         return "COMPLEX_PATTERN";
     }
-
 
     public double adjustForSeasonality(double baseForecast, Map<String, Double> seasonalityFactors, LocalDate targetDate) {
         double adjustment = 1.0;

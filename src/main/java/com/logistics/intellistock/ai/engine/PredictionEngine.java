@@ -3,10 +3,8 @@ package com.logistics.intellistock.ai.engine;
 import com.logistics.intellistock.ai.analysis.SeasonalityDetector;
 import com.logistics.intellistock.ai.analysis.TrendAnalyzer;
 import com.logistics.intellistock.ai.model.PredictionContext;
-import com.logistics.intellistock.entity.Product;
 import com.logistics.intellistock.entity.SalesHistory;
 import com.logistics.intellistock.entity.Stock;
-import com.logistics.intellistock.entity.Warehouse;
 import com.logistics.intellistock.repository.SalesHistoryRepository;
 import com.logistics.intellistock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +28,9 @@ public class PredictionEngine {
     private final TrendAnalyzer trendAnalyzer;
     private final SeasonalityDetector seasonalityDetector;
 
-
     public PredictionContext predictForProductAndWarehouse(Long productId, Long warehouseId,
                                                            int forecastDays) {
         try {
-            // Récupérer les données historiques
             LocalDate startDate = LocalDate.now().minusDays(90);
             List<SalesHistory> historicalData = salesHistoryRepository
                     .findByProductIdAndWarehouseIdAndDateRange(productId, warehouseId, startDate);
@@ -86,32 +82,43 @@ public class PredictionEngine {
         }
     }
 
-
     private double calculateBaseForecast(List<SalesHistory> historicalData, int forecastDays) {
         LocalDate cutoff = LocalDate.now().minusDays(30);
-        double recentAverage = historicalData.stream()
+
+        double recentTotal = historicalData.stream()
                 .filter(data -> !data.getSaleDate().isBefore(cutoff))
                 .mapToInt(SalesHistory::getQuantitySold)
-                .average()
-                .orElse(0.0);
+                .sum();
 
-        if (recentAverage <= 0) {
-            recentAverage = historicalData.stream()
+        long daysWithData = historicalData.stream()
+                .filter(data -> !data.getSaleDate().isBefore(cutoff))
+                .map(SalesHistory::getSaleDate)
+                .distinct()
+                .count();
+
+        double dailyAverage;
+        if (daysWithData > 0) {
+            dailyAverage = recentTotal / daysWithData;
+        } else {
+            double globalTotal = historicalData.stream()
                     .mapToInt(SalesHistory::getQuantitySold)
-                    .average()
-                    .orElse(0.0);
+                    .sum();
+
+            long totalDays = historicalData.stream()
+                    .map(SalesHistory::getSaleDate)
+                    .distinct()
+                    .count();
+
+            dailyAverage = (totalDays > 0) ? globalTotal / totalDays : 0.0;
         }
 
-        double dailyAverage = recentAverage / 30.0; // Moyenne quotidienne
         return dailyAverage * forecastDays;
     }
-
 
     private double applyTrendAdjustment(double baseForecast, double trendCoefficient) {
         double boundedCoefficient = Math.max(0.5, Math.min(2.0, trendCoefficient));
         return baseForecast * boundedCoefficient;
     }
-
 
     private BigDecimal calculateConfidenceLevel(List<SalesHistory> historicalData,
                                                 double trendCoefficient,
@@ -122,10 +129,7 @@ public class PredictionEngine {
         double dataFactor = Math.min(0.4, dataPoints / 250.0);
 
         double stabilityFactor = calculateStabilityFactor(historicalData) * 0.3;
-
-
         double seasonalityFactor = Math.min(0.2, seasonalityStrength * 0.3);
-
         double trendFactor = (1.0 - Math.abs(trendCoefficient - 1.0)) * 0.1;
 
         confidence = dataFactor + stabilityFactor + seasonalityFactor + trendFactor;
@@ -133,7 +137,6 @@ public class PredictionEngine {
         return BigDecimal.valueOf(Math.min(0.99, Math.max(0.1, confidence)))
                 .setScale(2, RoundingMode.HALF_UP);
     }
-
 
     private double calculateStabilityFactor(List<SalesHistory> historicalData) {
         if (historicalData.size() < 2) return 0.1;
@@ -155,9 +158,7 @@ public class PredictionEngine {
         return Math.max(0, 1.0 - cv);
     }
 
-
     private String generateRecommendation(double predictedQuantity, Long productId, Long warehouseId) {
-        // CORRECTION 1: Enlever le cast inutile
         Stock currentStock = stockRepository.findByProductIdAndWarehouseId(productId, warehouseId)
                 .orElse(null);
 
@@ -174,7 +175,7 @@ public class PredictionEngine {
             return String.format("ALERTE: Stock critique (%d unités). Commander immédiatement %d unités.",
                     currentQty, orderQty);
         } else if (needs > 0) {
-            int orderQty = (int) Math.ceil(needs * 1.2); // Buffer de 20%
+            int orderQty = (int) Math.ceil(needs * 1.2);
             return String.format("Prévision de %.0f unités. Recommander %d unités pour couvrir la demande.",
                     predictedQuantity, orderQty);
         } else if (currentQty > predictedQuantity * 3) {
@@ -185,7 +186,6 @@ public class PredictionEngine {
             return "Stock suffisant pour la période prévue.";
         }
     }
-
 
     private PredictionContext createDefaultPrediction(Long productId, Long warehouseId) {
         return PredictionContext.builder()
@@ -201,9 +201,9 @@ public class PredictionEngine {
                 .seasonalityPattern("UNKNOWN")
                 .historicalDataPoints(0)
                 .calculationTimestamp(System.currentTimeMillis())
+                .seasonalityStrength(0.0)
                 .build();
     }
-
 
     private PredictionContext createErrorPrediction(Long productId, Long warehouseId, String error) {
         return PredictionContext.builder()
@@ -219,9 +219,9 @@ public class PredictionEngine {
                 .seasonalityPattern("ERROR")
                 .historicalDataPoints(0)
                 .calculationTimestamp(System.currentTimeMillis())
+                .seasonalityStrength(0.0)
                 .build();
     }
-
 
     public List<PredictionContext> batchPredict(List<Long> productIds, Long warehouseId) {
         return productIds.stream()
