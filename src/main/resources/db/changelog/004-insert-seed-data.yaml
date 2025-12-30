@@ -74,10 +74,8 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: id, value: 1 }
-              - column: { name: login, value: "admin" }
+              - column: { name: username, value: "admin" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: first_name, value: "John" }
-              - column: { name: last_name, value: "Administrator" }
               - column: { name: email, value: "admin@intellistock.com" }
               - column: { name: role, value: "ADMIN" }
               - column: { name: is_active, valueBoolean: true }
@@ -88,10 +86,8 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: id, value: 2 }
-              - column: { name: login, value: "manager.ny" }
+              - column: { name: username, value: "manager.ny" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: first_name, value: "Sarah" }
-              - column: { name: last_name, value: "Johnson" }
               - column: { name: email, value: "sarah.johnson@intellistock.com" }
               - column: { name: role, value: "MANAGER" }
               - column: { name: is_active, valueBoolean: true }
@@ -102,10 +98,8 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: id, value: 3 }
-              - column: { name: login, value: "manager.la" }
+              - column: { name: username, value: "manager.la" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: first_name, value: "Michael" }
-              - column: { name: last_name, value: "Rodriguez" }
               - column: { name: email, value: "michael.rodriguez@intellistock.com" }
               - column: { name: role, value: "MANAGER" }
               - column: { name: is_active, valueBoolean: true }
@@ -116,10 +110,8 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: id, value: 4 }
-              - column: { name: login, value: "manager.chicago" }
+              - column: { name: username, value: "manager.chicago" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: first_name, value: "Emily" }
-              - column: { name: last_name, value: "Chen" }
               - column: { name: email, value: "emily.chen@intellistock.com" }
               - column: { name: role, value: "MANAGER" }
               - column: { name: is_active, valueBoolean: true }
@@ -130,10 +122,8 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: id, value: 5 }
-              - column: { name: login, value: "manager.miami" }
+              - column: { name: username, value: "manager.miami" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: first_name, value: "David" }
-              - column: { name: last_name, value: "Martinez" }
               - column: { name: email, value: "david.martinez@intellistock.com" }
               - column: { name: role, value: "MANAGER" }
               - column: { name: is_active, valueBoolean: true }
