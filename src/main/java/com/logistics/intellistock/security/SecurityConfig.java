@@ -40,9 +40,9 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/admin/**", "/api/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/admin/**", "/api/v1/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated());
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
