@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+    </repositories>
+    <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -15,12 +22,24 @@
   <name>intellistock</name>
   <description>AI-powered multi-warehouse stock prediction and management system</description>
 
-  <properties>
-    <java.version>17</java.version>
-    <jwt.version>0.12.3</jwt.version>
-    <mapstruct.version>1.5.5.Final</mapstruct.version>
-    <lombok.version>1.18.30</lombok.version>
-  </properties>
+    <properties>
+        <java.version>17</java.version>
+        <jwt.version>0.12.3</jwt.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok.version>1.18.30</lombok.version>
+        <spring-ai.version>1.0.0-M5</spring-ai.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
   <dependencies>
     <!-- Spring Boot Starters -->
@@ -42,10 +61,20 @@
     </dependency>
       <dependency>
           <groupId>org.springframework.ai</groupId>
-          <artifactId>spring-ai-starter-model-google-genai</artifactId>
-          <version>2.0.0-M1</version>
+          <artifactId>spring-ai-vertex-ai-gemini-spring-boot-starter</artifactId>
       </dependency>
-    <!-- Spring Data JPA - MANQUANT -->
+      <dependency>
+          <groupId>org.springframework.retry</groupId>
+          <artifactId>spring-retry</artifactId>
+      </dependency>
+
+      <!-- Spring AOP - Required for Spring Retry -->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-aop</artifactId>
+      </dependency>
+
+      <!-- Spring Data JPA - MANQUANT -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>

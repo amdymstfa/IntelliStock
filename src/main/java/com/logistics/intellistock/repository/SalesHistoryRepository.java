@@ -52,4 +52,7 @@ public interface SalesHistoryRepository extends JpaRepository<SalesHistory, Long
     @Param("productId") Long productId,
     @Param("warehouseId") Long warehouseId
   );
+
+    List<SalesHistory> findByProductIdAndWarehouseIdAndSaleDateBetween(Long productId, Long warehouseId, LocalDate startDate, LocalDate endDate);
+    List<SalesHistory> findByProductIdAndWarehouseIdAndYearBetween(Long productId, Long warehouseId, Integer startYear, Integer endYear);
 }
