@@ -5,11 +5,11 @@ databaseChangeLog:
       changes:
         # Users indexes
         - createIndex:
-            indexName: idx_users_login
+            indexName: idx_users_username
             tableName: users
             columns:
               - column:
-                  name: login
+                  name: username
 
         - createIndex:
             indexName: idx_users_email
