@@ -3,6 +3,10 @@ spring:
     activate:
       on-profile: test
 
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.autoconfigure.vertexai.gemini.VertexAiGeminiAutoConfiguration
+
   datasource:
     url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
@@ -26,14 +30,20 @@ spring:
   liquibase:
     enabled: false
 
+  ai:
+    vertex:
+      ai:
+        gemini:
+          enabled: false  # Désactiver Vertex AI en mode test
+
 # JWT Configuration for tests
 jwt:
-  secret: c3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXM # dummy key
+  secret: c3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXM
   expiration: 3600000
 
 # Encryption Configuration for tests
 encryption:
-  secret-key: test-encryption-key-32-chars!!
+  secret-key: "1234567890123456"
   algorithm: AES
 
 # AI Prediction Configuration for tests

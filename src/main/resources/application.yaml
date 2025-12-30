@@ -36,5 +36,19 @@ springdoc:
     enabled: true
 
 jwt:
-  secret: c3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXMc3VwZXJzZWNyZXRrZXlmb3J0ZXN0aW5ncHVycG9zZXM
+  secret: ${JWT_SECRET}
   expiration: 3600000
+
+encryption:
+  secret-key: ${ENCRYPTION_KEY}
+  algorithm: AES
+
+ai:
+  prediction:
+    days-to-analyze: 30
+    confidence-threshold: 0.70
+    min-data-points: 5
+    vertex:
+      ai:
+        project-id: ${GOOGLE_CLOUD_PROJECT}
+        location: ${VERTEX_AI_LOCATION}
