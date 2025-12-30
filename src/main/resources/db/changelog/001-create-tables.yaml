@@ -102,6 +102,8 @@ databaseChangeLog:
               - column:
                   name: warehouse_id
                   type: BIGINT
+                  constraints:
+                    nullable: true
               - column:
                   name: created_at
                   type: TIMESTAMP
