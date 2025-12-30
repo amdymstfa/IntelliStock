@@ -4,7 +4,6 @@ import com.logistics.intellistock.ai.analysis.SeasonalityDetector;
 import com.logistics.intellistock.ai.analysis.TrendAnalyzer;
 import com.logistics.intellistock.ai.model.PredictionContext;
 import com.logistics.intellistock.entity.SalesHistory;
-import com.logistics.intellistock.entity.Stock;
 import com.logistics.intellistock.repository.SalesHistoryRepository;
 import com.logistics.intellistock.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +31,10 @@ public class PredictionEngine {
                                                            int forecastDays) {
         try {
             LocalDate startDate = LocalDate.now().minusDays(90);
+            LocalDate endDate = LocalDate.now();
+
             List<SalesHistory> historicalData = salesHistoryRepository
-                    .findByProductIdAndWarehouseIdAndDateRange(productId, warehouseId, startDate);
+                    .findByProductIdAndWarehouseIdAndSaleDateBetween(productId, warehouseId, startDate, endDate);
 
             if (historicalData.isEmpty()) {
                 log.warn("Données insuffisantes pour la prédiction (productId: {}, warehouseId: {})",
@@ -159,7 +160,7 @@ public class PredictionEngine {
     }
 
     private String generateRecommendation(double predictedQuantity, Long productId, Long warehouseId) {
-        Stock currentStock = stockRepository.findByProductIdAndWarehouseId(productId, warehouseId)
+        var currentStock = stockRepository.findByProductIdAndWarehouseId(productId, warehouseId)
                 .orElse(null);
 
         if (currentStock == null) {
