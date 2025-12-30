@@ -1,201 +1,210 @@
 package com.logistics.intellistock.ai.analysis;
 
 import com.logistics.intellistock.entity.SalesHistory;
-import com.logistics.intellistock.entity.enums.DayOfWeek;
-import com.logistics.intellistock.repository.SalesHistoryRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 @Slf4j
-@Service
-@RequiredArgsConstructor
 public class SeasonalityDetector {
 
-    private final SalesHistoryRepository salesHistoryRepository;
 
-
-    public Map<DayOfWeek, Double> detectWeeklySeasonality(Long productId, Long warehouseId, int analysisMonths) {
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusMonths(analysisMonths);
-
-        List<SalesHistory> sales = salesHistoryRepository
-                .findByProductIdAndWarehouseIdAndSaleDateBetween(
-                        productId, warehouseId, startDate, endDate);
-
-        if (sales.isEmpty()) {
-            log.warn("No sales data found for product {} in warehouse {} in the last {} months",
-                    productId, warehouseId, analysisMonths);
+    public Map<String, Double> detectSeasonality(List<SalesHistory> salesHistoryList) {
+        if (salesHistoryList == null || salesHistoryList.isEmpty()) {
+            log.warn("Aucune donnée de vente disponible pour l'analyse de saisonnalité");
             return Collections.emptyMap();
         }
 
-        Map<DayOfWeek, List<Integer>> salesByDay = sales.stream()
-                .collect(Collectors.groupingBy(
-                        SalesHistory::getDayOfWeek,
-                        Collectors.mapping(SalesHistory::getQuantitySold, Collectors.toList())
-                ));
+        Map<String, Double> seasonalityFactors = new HashMap<>();
 
-        Map<DayOfWeek, Double> weeklyPattern = new HashMap<>();
+        seasonalityFactors.putAll(analyzeWeeklyPattern(salesHistoryList));
 
-        for (DayOfWeek day : DayOfWeek.values()) {
-            List<Integer> daySales = salesByDay.getOrDefault(day, Collections.emptyList());
-            double average = daySales.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-            weeklyPattern.put(day, average);
-        }
+        seasonalityFactors.putAll(analyzeMonthlyPattern(salesHistoryList));
 
-        log.info("Weekly seasonality pattern detected for product {}: {}", productId, weeklyPattern);
-        return weeklyPattern;
+        seasonalityFactors.putAll(detectPeaks(salesHistoryList));
+
+        log.debug("Analyse de saisonnalité terminée: {} facteurs détectés", seasonalityFactors.size());
+        return seasonalityFactors;
     }
 
 
-    public Map<Integer, Double> detectMonthlySeasonality(Long productId, Long warehouseId, int analysisYears) {
-        int currentYear = LocalDate.now().getYear();
-        int startYear = currentYear - analysisYears;
+    private Map<String, Double> analyzeWeeklyPattern(List<SalesHistory> salesHistoryList) {
+        Map<String, Double> weeklyFactors = new HashMap<>();
 
-        List<SalesHistory> sales = salesHistoryRepository
-                .findByProductIdAndWarehouseIdAndYearBetween(
-                        productId, warehouseId, startYear, currentYear);
+        Map<String, List<SalesHistory>> salesByDay = salesHistoryList.stream()
+                .collect(Collectors.groupingBy(sh -> sh.getDayOfWeek().name()));
 
-        if (sales.isEmpty()) {
-            log.warn("No sales data found for product {} in warehouse {} in the last {} years",
-                    productId, warehouseId, analysisYears);
-            return Collections.emptyMap();
+        double globalAverage = salesHistoryList.stream()
+                .mapToInt(SalesHistory::getQuantitySold)
+                .average()
+                .orElse(0.0);
+
+        if (globalAverage == 0) {
+            return weeklyFactors;
         }
 
-        Map<Integer, List<Integer>> salesByMonth = sales.stream()
-                .collect(Collectors.groupingBy(
-                        SalesHistory::getMonth,
-                        Collectors.mapping(SalesHistory::getQuantitySold, Collectors.toList())
-                ));
+        for (String day : Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")) {
+            List<SalesHistory> daySales = salesByDay.get(day);
+            if (daySales != null && !daySales.isEmpty()) {
+                double dayAverage = daySales.stream()
+                        .mapToInt(SalesHistory::getQuantitySold)
+                        .average()
+                        .orElse(0.0);
 
-        Map<Integer, Double> monthlyPattern = new HashMap<>();
+                double factor = dayAverage / globalAverage;
+                weeklyFactors.put("DAY_" + day, factor);
+            }
+        }
+
+        return weeklyFactors;
+    }
+
+
+    private Map<String, Double> analyzeMonthlyPattern(List<SalesHistory> salesHistoryList) {
+        Map<String, Double> monthlyFactors = new HashMap<>();
+
+        Map<Integer, List<SalesHistory>> salesByMonth = salesHistoryList.stream()
+                .collect(Collectors.groupingBy(SalesHistory::getMonth));
+
+        double globalAverage = salesHistoryList.stream()
+                .mapToInt(SalesHistory::getQuantitySold)
+                .average()
+                .orElse(0.0);
+
+        if (globalAverage == 0) {
+            return monthlyFactors;
+        }
 
         for (int month = 1; month <= 12; month++) {
-            List<Integer> monthSales = salesByMonth.getOrDefault(month, Collections.emptyList());
-            double average = monthSales.stream().mapToInt(Integer::intValue).average().orElse(0.0);
-            monthlyPattern.put(month, average);
+            List<SalesHistory> monthSales = salesByMonth.get(month);
+            if (monthSales != null && !monthSales.isEmpty()) {
+                double monthAverage = monthSales.stream()
+                        .mapToInt(SalesHistory::getQuantitySold)
+                        .average()
+                        .orElse(0.0);
+
+                double factor = monthAverage / globalAverage;
+                monthlyFactors.put("MONTH_" + month, factor);
+            }
         }
 
-        log.info("Monthly seasonality pattern detected for product {}: {}", productId, monthlyPattern);
-        return monthlyPattern;
+        return monthlyFactors;
     }
 
 
-    public Map<String, Double> calculateSeasonalCoefficients(Long productId, Long warehouseId) {
-        Map<DayOfWeek, Double> weeklyPattern = detectWeeklySeasonality(productId, warehouseId, 6);
-        Map<Integer, Double> monthlyPattern = detectMonthlySeasonality(productId, warehouseId, 3);
+    private Map<String, Double> detectPeaks(List<SalesHistory> salesHistoryList) {
+        Map<String, Double> peaks = new HashMap<>();
 
-        if (weeklyPattern.isEmpty() && monthlyPattern.isEmpty()) {
-            return Collections.emptyMap();
+        Map<LocalDate, Integer> dailySales = new HashMap<>();
+        for (SalesHistory sale : salesHistoryList) {
+            dailySales.merge(sale.getSaleDate(), sale.getQuantitySold(), Integer::sum);
         }
 
-        Map<String, Double> coefficients = new HashMap<>();
-
-        double weeklyAvg = weeklyPattern.values().stream()
-                .mapToDouble(Double::doubleValue)
-                .average()
-                .orElse(1.0);
-
-        for (Map.Entry<DayOfWeek, Double> entry : weeklyPattern.entrySet()) {
-            double coefficient = weeklyAvg > 0 ? entry.getValue() / weeklyAvg : 1.0;
-            coefficients.put("WEEKLY_" + entry.getKey(), coefficient);
+        if (dailySales.isEmpty()) {
+            return peaks;
         }
 
-        double monthlyAvg = monthlyPattern.values().stream()
-                .mapToDouble(Double::doubleValue)
-                .average()
-                .orElse(1.0);
+        List<Integer> salesValues = new ArrayList<>(dailySales.values());
+        double mean = salesValues.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        double stdDev = calculateStdDev(salesValues, mean);
 
-        for (Map.Entry<Integer, Double> entry : monthlyPattern.entrySet()) {
-            double coefficient = monthlyAvg > 0 ? entry.getValue() / monthlyAvg : 1.0;
-            coefficients.put("MONTHLY_" + entry.getKey(), coefficient);
+        double threshold = mean + (1.5 * stdDev);
+
+        for (Map.Entry<LocalDate, Integer> entry : dailySales.entrySet()) {
+            if (entry.getValue() > threshold) {
+                double peakFactor = entry.getValue() / mean;
+                peaks.put("PEAK_" + entry.getKey(), peakFactor);
+            }
         }
 
-        detectSeasonalPeaks(weeklyPattern, monthlyPattern, coefficients);
-
-        log.info("Seasonal coefficients calculated for product {}: {}", productId, coefficients);
-        return coefficients;
+        return peaks;
     }
 
 
-    private void detectSeasonalPeaks(
-            Map<DayOfWeek, Double> weeklyPattern,
-            Map<Integer, Double> monthlyPattern,
-            Map<String, Double> coefficients) {
+    private double calculateStdDev(List<Integer> values, double mean) {
+        if (values.size() <= 1) {
+            return 0.0;
+        }
 
-        Optional<Map.Entry<DayOfWeek, Double>> maxWeekly = weeklyPattern.entrySet().stream()
+        double variance = values.stream()
+                .mapToDouble(v -> Math.pow(v - mean, 2))
+                .sum() / (values.size() - 1);
+
+        return Math.sqrt(variance);
+    }
+
+
+    public String getSeasonalityPattern(List<SalesHistory> salesHistoryList) {
+        Map<String, Double> factors = detectSeasonality(salesHistoryList);
+
+        if (factors.isEmpty()) {
+            return "NO_PATTERN";
+        }
+
+        Optional<Map.Entry<String, Double>> maxEntry = factors.entrySet().stream()
                 .max(Map.Entry.comparingByValue());
 
-        Optional<Map.Entry<Integer, Double>> maxMonthly = monthlyPattern.entrySet().stream()
-                .max(Map.Entry.comparingByValue());
+        if (maxEntry.isPresent() || maxEntry.get().getValue() <= 1.0) {
+            return "STABLE";
+        }
 
-        maxWeekly.ifPresent(entry -> {
-            double avg = weeklyPattern.values().stream().mapToDouble(Double::doubleValue).average().orElse(0);
-            if (entry.getValue() > avg * 1.5) { // 50% au-dessus de la moyenne
-                coefficients.put("PEAK_DAY", (double) entry.getKey().ordinal());
-            }
-        });
+        String key = maxEntry.get().getKey();
+        double value = maxEntry.get().getValue();
 
-        maxMonthly.ifPresent(entry -> {
-            double avg = monthlyPattern.values().stream().mapToDouble(Double::doubleValue).average().orElse(0);
-            if (entry.getValue() > avg * 1.5) { // 50% au-dessus de la moyenne
-                coefficients.put("PEAK_MONTH", entry.getKey().doubleValue());
-            }
-        });
+        if (key.startsWith("DAY_")) {
+            return "WEEKLY_" + key.substring(4) + "_x" + String.format("%.1f", value);
+        } else if (key.startsWith("MONTH_")) {
+            return "MONTHLY_" + key.substring(6) + "_x" + String.format("%.1f", value);
+        }
+
+        return "COMPLEX_PATTERN";
     }
 
 
-    public String getSeasonalityInsights(Long productId, Long warehouseId) {
-        Map<String, Double> coefficients = calculateSeasonalCoefficients(productId, warehouseId);
+    public double adjustForSeasonality(double baseForecast, Map<String, Double> seasonalityFactors, LocalDate targetDate) {
+        double adjustment = 1.0;
 
-        if (coefficients.isEmpty()) {
-            return "Données insuffisantes pour détecter la saisonnalité";
+        String dayOfWeek = targetDate.getDayOfWeek().name();
+        String dayKey = "DAY_" + dayOfWeek;
+        if (seasonalityFactors.containsKey(dayKey)) {
+            adjustment *= seasonalityFactors.get(dayKey);
         }
 
-        StringBuilder insights = new StringBuilder();
-        insights.append("Analyse de saisonnalité :\n");
-
-        coefficients.entrySet().stream()
-                .filter(e -> e.getKey().startsWith("WEEKLY_"))
-                .filter(e -> e.getValue() > 1.2)
-                .forEach(e -> {
-                    String day = e.getKey().replace("WEEKLY_", "");
-                    insights.append(String.format("- Fortes ventes le %s (coefficient: %.2f)\n",
-                            day, e.getValue()));
-                });
-
-        coefficients.entrySet().stream()
-                .filter(e -> e.getKey().startsWith("MONTHLY_"))
-                .filter(e -> e.getValue() > 1.3)
-                .forEach(e -> {
-                    int month = Integer.parseInt(e.getKey().replace("MONTHLY_", ""));
-                    insights.append(String.format("- Pics saisonniers en mois %d (coefficient: %.2f)\n",
-                            month, e.getValue()));
-                });
-
-        if (coefficients.containsKey("PEAK_DAY")) {
-            int peakDay = coefficients.get("PEAK_DAY").intValue();
-            insights.append(String.format("Pics de ventes détectés le %s - anticiper les stocks\n",
-                    DayOfWeek.values()[peakDay]));
+        int month = targetDate.getMonthValue();
+        String monthKey = "MONTH_" + month;
+        if (seasonalityFactors.containsKey(monthKey)) {
+            adjustment *= seasonalityFactors.get(monthKey);
         }
 
-        if (coefficients.containsKey("PEAK_MONTH")) {
-            int peakMonth = coefficients.get("PEAK_MONTH").intValue();
-            insights.append(String.format("Saisonnalité mensuelle forte en %s - augmenter les stocks\n",
-                    getMonthName(peakMonth)));
+        for (String key : seasonalityFactors.keySet()) {
+            if (key.startsWith("PEAK_")) {
+                try {
+                    LocalDate peakDate = LocalDate.parse(key.substring(5));
+                    long daysBetween = Math.abs(java.time.temporal.ChronoUnit.DAYS.between(peakDate, targetDate));
+                    if (daysBetween <= 3) {
+                        adjustment *= seasonalityFactors.get(key);
+                        break;
+                    }
+                } catch (Exception e) {
+                }
+            }
         }
 
-        return insights.toString();
+        return baseForecast * adjustment;
     }
 
-    private String getMonthName(int month) {
-        String[] monthNames = {"Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"};
-        return month >= 1 && month <= 12 ? monthNames[month - 1] : "Mois " + month;
+    public double calculateSeasonalityStrength(Map<String, Double> seasonalityFactors) {
+        if (seasonalityFactors.isEmpty()) {
+            return 0.0;
+        }
+
+        return seasonalityFactors.values().stream()
+                .mapToDouble(factor -> Math.abs(factor - 1.0))
+                .max()
+                .orElse(0.0);
     }
 }
