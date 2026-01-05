@@ -30,7 +30,7 @@ public class UserPrincipal implements UserDetails {
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections
-                .singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+                .singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
         return UserPrincipal.builder()
                 .id(user.getId())
