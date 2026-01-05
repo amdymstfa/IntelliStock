@@ -41,11 +41,11 @@ public class Product {
   private BigDecimal sellingPrice;
 
   @Convert(converter = EncryptionConverter.class)
-  @Column(nullable = false, columnDefinition = "TEXT")
+  @Column(name = "purchase_price_encrypted", nullable = false, columnDefinition = "TEXT")
   private BigDecimal purchasePrice;
 
   @Convert(converter = EncryptionConverter.class)
-  @Column(columnDefinition = "TEXT")
+  @Column(name = "margin_encrypted", columnDefinition = "TEXT")
   private BigDecimal margin;
 
   @Column(precision = 10, scale = 2)

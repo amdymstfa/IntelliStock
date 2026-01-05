@@ -36,7 +36,7 @@ public class Prediction {
   @Column(nullable = false)
   private LocalDate predictionDate;
 
-  @Column(nullable = false)
+  @Column(name = "predicted_quantity_30_days", nullable = false)
   private Integer predictedQuantity30Days;
 
   @Column(nullable = false, precision = 5, scale = 2)
