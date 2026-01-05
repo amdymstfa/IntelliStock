@@ -9,7 +9,6 @@ databaseChangeLog:
         - insert:
             tableName: warehouses
             columns:
-              - column: { name: id, value: 1 }
               - column: { name: name, value: "New York Central Warehouse" }
               - column: { name: city, value: "New York" }
               - column: { name: address, value: "1250 Broadway Avenue" }
@@ -23,7 +22,6 @@ databaseChangeLog:
         - insert:
             tableName: warehouses
             columns:
-              - column: { name: id, value: 2 }
               - column: { name: name, value: "Los Angeles Distribution Center" }
               - column: { name: city, value: "Los Angeles" }
               - column: { name: address, value: "8500 Sunset Boulevard" }
@@ -37,7 +35,6 @@ databaseChangeLog:
         - insert:
             tableName: warehouses
             columns:
-              - column: { name: id, value: 3 }
               - column: { name: name, value: "Chicago Logistics Hub" }
               - column: { name: city, value: "Chicago" }
               - column: { name: address, value: "350 North Michigan Avenue" }
@@ -51,7 +48,6 @@ databaseChangeLog:
         - insert:
             tableName: warehouses
             columns:
-              - column: { name: id, value: 4 }
               - column: { name: name, value: "Miami Storage Facility" }
               - column: { name: city, value: "Miami" }
               - column: { name: address, value: "2750 Biscayne Boulevard" }
@@ -73,7 +69,6 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: id, value: 1 }
               - column: { name: username, value: "admin" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
               - column: { name: email, value: "admin@intellistock.com" }
@@ -85,10 +80,9 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: id, value: 2 }
               - column: { name: username, value: "manager.ny" }
+              - column: { name: email, value: "ny.manager@intellistock.com" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
-              - column: { name: email, value: "sarah.johnson@intellistock.com" }
               - column: { name: role, value: "MANAGER" }
               - column: { name: is_active, valueBoolean: true }
               - column: { name: warehouse_id, valueNumeric: 1 }
@@ -97,7 +91,6 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: id, value: 3 }
               - column: { name: username, value: "manager.la" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
               - column: { name: email, value: "michael.rodriguez@intellistock.com" }
@@ -109,7 +102,6 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: id, value: 4 }
               - column: { name: username, value: "manager.chicago" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
               - column: { name: email, value: "emily.chen@intellistock.com" }
@@ -121,7 +113,6 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column: { name: id, value: 5 }
               - column: { name: username, value: "manager.miami" }
               - column: { name: password, value: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy" }
               - column: { name: email, value: "david.martinez@intellistock.com" }
@@ -140,7 +131,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 1 }
               - column: { name: name, value: "Laptop Dell XPS 15" }
               - column: { name: description, value: "High-performance laptop with Intel i7, 16GB RAM, 512GB SSD" }
               - column: { name: category, value: "ELECTRONICS" }
@@ -155,7 +145,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 2 }
               - column: { name: name, value: "iPhone 15 Pro" }
               - column: { name: description, value: "Latest iPhone with A17 chip, 256GB storage" }
               - column: { name: category, value: "ELECTRONICS" }
@@ -170,7 +159,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 3 }
               - column: { name: name, value: "Samsung 55-inch 4K TV" }
               - column: { name: description, value: "Smart TV with HDR, 120Hz refresh rate" }
               - column: { name: category, value: "ELECTRONICS" }
@@ -186,7 +174,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 4 }
               - column: { name: name, value: "Office Ergonomic Chair" }
               - column: { name: description, value: "Adjustable office chair with lumbar support" }
               - column: { name: category, value: "FURNITURE" }
@@ -201,7 +188,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 5 }
               - column: { name: name, value: "Standing Desk Electric" }
               - column: { name: description, value: "Height-adjustable desk with memory settings" }
               - column: { name: category, value: "FURNITURE" }
@@ -217,7 +203,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 6 }
               - column: { name: name, value: "Organic Olive Oil Premium" }
               - column: { name: description, value: "Extra virgin olive oil from Italy, 1L bottle" }
               - column: { name: category, value: "FOOD" }
@@ -232,7 +217,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 7 }
               - column: { name: name, value: "Organic Coffee Beans" }
               - column: { name: description, value: "Arabica coffee beans from Colombia, 500g pack" }
               - column: { name: category, value: "FOOD" }
@@ -248,7 +232,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 8 }
               - column: { name: name, value: "Men's Cotton T-Shirt" }
               - column: { name: description, value: "100% organic cotton, available in multiple colors" }
               - column: { name: category, value: "CLOTHING" }
@@ -263,7 +246,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 9 }
               - column: { name: name, value: "Women's Running Shoes" }
               - column: { name: description, value: "Lightweight running shoes with cushioned sole" }
               - column: { name: category, value: "CLOTHING" }
@@ -279,7 +261,6 @@ databaseChangeLog:
         - insert:
             tableName: products
             columns:
-              - column: { name: id, value: 10 }
               - column: { name: name, value: "Stainless Steel Cookware Set" }
               - column: { name: description, value: "10-piece cookware set with non-stick coating" }
               - column: { name: category, value: "HOME_GARDEN" }
