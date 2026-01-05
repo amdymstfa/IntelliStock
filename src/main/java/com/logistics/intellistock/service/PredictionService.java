@@ -9,4 +9,5 @@ public interface PredictionService {
     List<PredictionResponse> getPredictionsByWarehouse(Long warehouseId);
     PredictionResponse getLatestPrediction(Long productId, Long warehouseId);
     void generatePredictionsForAllProducts();
+    List<PredictionResponse> getAlertPredictions(Long warehouseId);
 }

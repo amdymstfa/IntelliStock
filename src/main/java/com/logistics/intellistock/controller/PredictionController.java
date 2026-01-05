@@ -5,16 +5,17 @@ import com.logistics.intellistock.service.PredictionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/predictions")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Predictions", description = "API de prédiction de stock et de recommandations AI")
 public class PredictionController {
 
@@ -27,8 +28,24 @@ public class PredictionController {
             @RequestParam Long productId,
             @RequestParam Long warehouseId) {
 
-        PredictionResponse response = predictionService.generatePrediction(productId, warehouseId);
-        return ResponseEntity.ok(response);
+        try {
+            if (productId == null || productId <= 0) {
+                log.warn("ProductId invalide: {}", productId);
+                return ResponseEntity.badRequest().build();
+            }
+
+            if (warehouseId == null || warehouseId <= 0) {
+                log.warn("WarehouseId invalide: {}", warehouseId);
+                return ResponseEntity.badRequest().build();
+            }
+
+            PredictionResponse response = predictionService.generatePrediction(productId, warehouseId);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la génération de prédiction", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/warehouse/{warehouseId}")
@@ -37,8 +54,19 @@ public class PredictionController {
     public ResponseEntity<List<PredictionResponse>> getPredictionsByWarehouse(
             @PathVariable Long warehouseId) {
 
-        List<PredictionResponse> predictions = predictionService.getPredictionsByWarehouse(warehouseId);
-        return ResponseEntity.ok(predictions);
+        try {
+            if (warehouseId == null || warehouseId <= 0) {
+                log.warn("WarehouseId invalide: {}", warehouseId);
+                return ResponseEntity.badRequest().build();
+            }
+
+            List<PredictionResponse> predictions = predictionService.getPredictionsByWarehouse(warehouseId);
+            return ResponseEntity.ok(predictions);
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la récupération des prédictions", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/latest")
@@ -48,16 +76,39 @@ public class PredictionController {
             @RequestParam Long productId,
             @RequestParam Long warehouseId) {
 
-        PredictionResponse prediction = predictionService.getLatestPrediction(productId, warehouseId);
-        return prediction != null ? ResponseEntity.ok(prediction) : ResponseEntity.notFound().build();
+        try {
+            if (productId == null || productId <= 0 || warehouseId == null || warehouseId <= 0) {
+                log.warn("Paramètres invalides - ProductId: {}, WarehouseId: {}", productId, warehouseId);
+                return ResponseEntity.badRequest().build();
+            }
+
+            PredictionResponse prediction = predictionService.getLatestPrediction(productId, warehouseId);
+
+            if (prediction == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok(prediction);
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la récupération de la dernière prédiction", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @PostMapping("/generate-all")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Générer des prédictions pour tous les produits (admin seulement)")
     public ResponseEntity<Void> generatePredictionsForAllProducts() {
-        predictionService.generatePredictionsForAllProducts();
-        return ResponseEntity.accepted().build();
+        try {
+            log.info("Démarrage de la génération de toutes les prédictions");
+            predictionService.generatePredictionsForAllProducts();
+            return ResponseEntity.accepted().build();
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la génération globale", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @GetMapping("/alerts")
@@ -65,7 +116,19 @@ public class PredictionController {
     @Operation(summary = "Récupérer les prédictions avec alertes de stock")
     public ResponseEntity<List<PredictionResponse>> getAlertPredictions(
             @RequestParam(required = false) Long warehouseId) {
-        return ResponseEntity.ok(Collections.emptyList());
 
+        try {
+            if (warehouseId != null && warehouseId <= 0) {
+                log.warn("WarehouseId invalide: {}", warehouseId);
+                return ResponseEntity.badRequest().build();
+            }
+
+            List<PredictionResponse> alerts = predictionService.getAlertPredictions(warehouseId);
+            return ResponseEntity.ok(alerts);
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la récupération des alertes", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

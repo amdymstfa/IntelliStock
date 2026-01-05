@@ -25,7 +25,7 @@ public class TrendAnalyzer {
                 .collect(Collectors.toList());
 
         int periodSize = sortedData.size() / 3;
-        if (periodSize < 1) {
+        if (periodSize < 2) {
             return 1.0;
         }
 
@@ -38,11 +38,17 @@ public class TrendAnalyzer {
         double avg2 = calculatePeriodAverage(secondPeriod);
         double avg3 = calculatePeriodAverage(thirdPeriod);
 
-        double slope1to2 = (avg1 > 0) ? (avg2 - avg1) / avg1 : 0.0;
-        double slope2to3 = (avg2 > 0) ? (avg3 - avg2) / avg2 : 0.0;
+        if (avg1 == 0 || avg2 == 0) {
+            return 1.0;
+        }
+
+        double slope1to2 = (avg2 - avg1) / avg1;
+        double slope2to3 = (avg3 - avg2) / avg2;
 
         double weightedSlope = (slope1to2 * 0.4) + (slope2to3 * 0.6);
         double trendCoefficient = 1.0 + weightedSlope;
+
+        trendCoefficient = Math.max(0.5, Math.min(2.0, trendCoefficient));
 
         log.debug("Coefficient de tendance calculé: {} (pentes: {}, {})",
                 trendCoefficient, slope1to2, slope2to3);
@@ -182,13 +188,14 @@ public class TrendAnalyzer {
 
     private double calculateRSquared(List<Double> xValues, List<Double> yValues) {
         double slope = calculateSlope(xValues, yValues);
+        double intercept = calculateIntercept(xValues, yValues, slope);
         double yMean = yValues.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
 
         double ssTot = 0.0;
         double ssRes = 0.0;
 
         for (int i = 0; i < xValues.size(); i++) {
-            double yPred = slope * xValues.get(i);
+            double yPred = slope * xValues.get(i) + intercept;
             ssTot += Math.pow(yValues.get(i) - yMean, 2);
             ssRes += Math.pow(yValues.get(i) - yPred, 2);
         }
@@ -198,5 +205,10 @@ public class TrendAnalyzer {
         }
 
         return 1.0 - (ssRes / ssTot);
+    }
+    private double calculateIntercept(List<Double> xValues, List<Double> yValues, double slope) {
+        double xMean = xValues.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+        double yMean = yValues.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+        return yMean - (slope * xMean);
     }
 }

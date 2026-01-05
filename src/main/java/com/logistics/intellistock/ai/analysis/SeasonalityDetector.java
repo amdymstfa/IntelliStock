@@ -105,12 +105,13 @@ public class SeasonalityDetector {
         double mean = salesValues.stream().mapToInt(Integer::intValue).average().orElse(0.0);
         double stdDev = calculateStdDev(salesValues, mean);
 
-        double threshold = mean + (1.5 * stdDev);
+        double threshold = mean + (2.0 * stdDev);
 
         for (Map.Entry<LocalDate, Integer> entry : dailySales.entrySet()) {
             if (entry.getValue() > threshold) {
                 double peakFactor = entry.getValue() / mean;
                 peaks.put("PEAK_" + entry.getKey(), peakFactor);
+                log.debug("Pic détecté: {} avec facteur {}", entry.getKey(), peakFactor);
             }
         }
 
@@ -156,18 +157,20 @@ public class SeasonalityDetector {
     }
 
     public double adjustForSeasonality(double baseForecast, Map<String, Double> seasonalityFactors, LocalDate targetDate) {
-        double adjustment = 1.0;
+        double dayAdjustment = 1.0;
+        double monthAdjustment = 1.0;
+        double peakAdjustment = 1.0;
 
         String dayOfWeek = targetDate.getDayOfWeek().name();
         String dayKey = "DAY_" + dayOfWeek;
         if (seasonalityFactors.containsKey(dayKey)) {
-            adjustment *= seasonalityFactors.get(dayKey);
+            dayAdjustment = seasonalityFactors.get(dayKey);
         }
 
         int month = targetDate.getMonthValue();
         String monthKey = "MONTH_" + month;
         if (seasonalityFactors.containsKey(monthKey)) {
-            adjustment *= seasonalityFactors.get(monthKey);
+            monthAdjustment = seasonalityFactors.get(monthKey);
         }
 
         for (String key : seasonalityFactors.keySet()) {
@@ -176,17 +179,26 @@ public class SeasonalityDetector {
                     LocalDate peakDate = LocalDate.parse(key.substring(5));
                     long daysBetween = Math.abs(java.time.temporal.ChronoUnit.DAYS.between(peakDate, targetDate));
                     if (daysBetween <= 3) {
-                        adjustment *= seasonalityFactors.get(key);
+                        peakAdjustment = seasonalityFactors.get(key);
                         break;
                     }
                 } catch (Exception e) {
+                    log.warn("Erreur parsing date pic: {}", key);
                 }
             }
         }
 
-        return baseForecast * adjustment;
-    }
+        double finalAdjustment;
+        if (peakAdjustment > 1.0) {
+            finalAdjustment = peakAdjustment * Math.sqrt(dayAdjustment * monthAdjustment);
+        } else {
+            finalAdjustment = dayAdjustment * monthAdjustment;
+        }
 
+        finalAdjustment = Math.max(0.3, Math.min(3.0, finalAdjustment));
+
+        return baseForecast * finalAdjustment;
+    }
     public double calculateSeasonalityStrength(Map<String, Double> seasonalityFactors) {
         if (seasonalityFactors.isEmpty()) {
             return 0.0;

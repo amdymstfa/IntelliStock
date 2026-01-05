@@ -85,37 +85,34 @@ public class PredictionEngine {
 
     private double calculateBaseForecast(List<SalesHistory> historicalData, int forecastDays) {
         LocalDate cutoff = LocalDate.now().minusDays(30);
+        LocalDate now = LocalDate.now();
 
         double recentTotal = historicalData.stream()
                 .filter(data -> !data.getSaleDate().isBefore(cutoff))
                 .mapToInt(SalesHistory::getQuantitySold)
                 .sum();
 
-        long daysWithData = historicalData.stream()
-                .filter(data -> !data.getSaleDate().isBefore(cutoff))
-                .map(SalesHistory::getSaleDate)
-                .distinct()
-                .count();
+        long actualDaysInPeriod = java.time.temporal.ChronoUnit.DAYS.between(cutoff, now);
 
         double dailyAverage;
-        if (daysWithData > 0) {
-            dailyAverage = recentTotal / daysWithData;
+        if (actualDaysInPeriod > 0 && recentTotal > 0) {
+            dailyAverage = recentTotal / actualDaysInPeriod;
         } else {
             double globalTotal = historicalData.stream()
                     .mapToInt(SalesHistory::getQuantitySold)
                     .sum();
 
-            long totalDays = historicalData.stream()
+            LocalDate firstDate = historicalData.stream()
                     .map(SalesHistory::getSaleDate)
-                    .distinct()
-                    .count();
+                    .min(LocalDate::compareTo)
+                    .orElse(cutoff);
 
+            long totalDays = java.time.temporal.ChronoUnit.DAYS.between(firstDate, now);
             dailyAverage = (totalDays > 0) ? globalTotal / totalDays : 0.0;
         }
 
         return dailyAverage * forecastDays;
     }
-
     private double applyTrendAdjustment(double baseForecast, double trendCoefficient) {
         double boundedCoefficient = Math.max(0.5, Math.min(2.0, trendCoefficient));
         return baseForecast * boundedCoefficient;
@@ -124,19 +121,26 @@ public class PredictionEngine {
     private BigDecimal calculateConfidenceLevel(List<SalesHistory> historicalData,
                                                 double trendCoefficient,
                                                 double seasonalityStrength) {
-        double confidence = 0.0;
-
         int dataPoints = historicalData.size();
-        double dataFactor = Math.min(0.4, dataPoints / 250.0);
+        double dataFactor = Math.min(1.0, dataPoints / 100.0); // 0 à 1.0
 
-        double stabilityFactor = calculateStabilityFactor(historicalData) * 0.3;
-        double seasonalityFactor = Math.min(0.2, seasonalityStrength * 0.3);
-        double trendFactor = (1.0 - Math.abs(trendCoefficient - 1.0)) * 0.1;
+        double stabilityFactor = calculateStabilityFactor(historicalData); // 0 à 1.0
 
-        confidence = dataFactor + stabilityFactor + seasonalityFactor + trendFactor;
+        double trendStability = 1.0 - Math.min(1.0, Math.abs(trendCoefficient - 1.0));
 
-        return BigDecimal.valueOf(Math.min(0.99, Math.max(0.1, confidence)))
-                .setScale(2, RoundingMode.HALF_UP);
+        double seasonalityPenalty = seasonalityStrength > 0.3 && dataPoints < 60
+                ? 0.8
+                : 1.0;
+
+        double confidence = (
+                dataFactor * 0.35 +
+                        stabilityFactor * 0.35 +
+                        trendStability * 0.30
+        ) * seasonalityPenalty;
+
+        confidence = Math.max(0.1, Math.min(0.95, confidence));
+
+        return BigDecimal.valueOf(confidence).setScale(2, RoundingMode.HALF_UP);
     }
 
     private double calculateStabilityFactor(List<SalesHistory> historicalData) {

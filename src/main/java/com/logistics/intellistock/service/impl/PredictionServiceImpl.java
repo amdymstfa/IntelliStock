@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -160,10 +157,11 @@ public class PredictionServiceImpl implements PredictionService {
         Prediction prediction = Prediction.builder()
                 .product(product)
                 .warehouse(warehouse)
-                .predictionDate(context.getForecastDate())
-                .predictedQuantity30Days(context.getPredictedQuantity().intValue())
-                .confidenceLevel(context.getConfidenceLevel())
-                .recommendation(enhancedRecommendation)
+                .predictionDate(context.getForecastDate() != null ? context.getForecastDate() : LocalDate.now())
+                .predictedQuantity30Days(context.getPredictedQuantity() != null ? context.getPredictedQuantity().intValue() : 0)
+                .confidenceLevel(context.getConfidenceLevel() != null ? context.getConfidenceLevel() : BigDecimal.ZERO)
+                .recommendation(enhancedRecommendation != null ? enhancedRecommendation : "Pas de recommandation")
+                .createdAt(LocalDateTime.now())
                 .build();
 
         return predictionRepository.save(prediction);
@@ -181,4 +179,30 @@ public class PredictionServiceImpl implements PredictionService {
         return seasonalFactors.getOrDefault(currentMonth, 1.0);
     }
 
+    @Override
+    public List<PredictionResponse> getAlertPredictions(Long warehouseId) {
+        try {
+            List<PredictionResponse> allPredictions;
+
+            if (warehouseId != null) {
+                allPredictions = getPredictionsByWarehouse(warehouseId);
+            } else {
+                allPredictions = predictionRepository.findAll()
+                        .stream()
+                        .map(predictionMapper::toResponse)
+                        .collect(Collectors.toList());
+            }
+
+            return allPredictions.stream()
+                    .filter(p -> p.getRecommendation() != null &&
+                            (p.getRecommendation().contains("ALERTE") ||
+                                    p.getRecommendation().contains("CRITIQUE") ||
+                                    p.getRecommendation().contains("SURSTOCK")))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            log.error("Erreur lors de la récupération des alertes", e);
+            return Collections.emptyList();
+        }
+    }
 }
