@@ -131,13 +131,12 @@ databaseChangeLog:
 
   # ===========================================
   # PRODUCTS DATA (with encrypted purchase price and margin)
-  # Note: In real implementation, these will be encrypted by EncryptionService
   # ===========================================
   - changeSet:
       id: 012-insert-products
       author: intellistock-team
       changes:
-        # ELECTRONICS CATEGORY
+        # ELECTRONICS
         - insert:
             tableName: products
             columns:
@@ -147,8 +146,8 @@ databaseChangeLog:
               - column: { name: category, value: "ELECTRONICS" }
               - column: { name: sku, value: "ELEC-LAP-001" }
               - column: { name: selling_price, value: "1499.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:1200.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:299.99" }
+              - column: { name: purchase_price_encrypted, value: "LGCmjQ/cEIC7COUGGL7CGwrW0BqqEj7sPkYJcm6nI5Y=" }
+              - column: { name: margin_encrypted, value: "X27W8E+rFzHzY5IFXlFWfUgYvmG11OkSYR9IL8mnOCg=" }
               - column: { name: weight, value: "2.5" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
@@ -162,8 +161,8 @@ databaseChangeLog:
               - column: { name: category, value: "ELECTRONICS" }
               - column: { name: sku, value: "ELEC-PHO-002" }
               - column: { name: selling_price, value: "1099.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:850.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:249.99" }
+              - column: { name: purchase_price_encrypted, value: "/mIqlcFDYW6hVbPmXxxYAc9S5PhG4GzXCPmvOmOhXs4=" }
+              - column: { name: margin_encrypted, value: "SBt/Tya7SNItcqNkpzEjGcaS0ucS92l8h3Dsm8kTulM=" }
               - column: { name: weight, value: "0.3" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
@@ -177,13 +176,13 @@ databaseChangeLog:
               - column: { name: category, value: "ELECTRONICS" }
               - column: { name: sku, value: "ELEC-TV-003" }
               - column: { name: selling_price, value: "799.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:600.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:199.99" }
+              - column: { name: purchase_price_encrypted, value: "zE8SLYgbi5RGAZtYdIY1VC6qVn2tkOKBAJ2ZYEshTcc=" }
+              - column: { name: margin_encrypted, value: "4V32YV5jP5a/seia+cJ+vZg+LKJVp8jfoKvC1/wmGXo=" }
               - column: { name: weight, value: "18.5" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
 
-        # FURNITURE CATEGORY
+        # FURNITURE
         - insert:
             tableName: products
             columns:
@@ -193,8 +192,8 @@ databaseChangeLog:
               - column: { name: category, value: "FURNITURE" }
               - column: { name: sku, value: "FURN-CHR-001" }
               - column: { name: selling_price, value: "349.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:200.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:149.99" }
+              - column: { name: purchase_price_encrypted, value: "EhOHu8wkZagYDnzNFBHQnH06NE0j94tWpwsTvFtoUFw=" }
+              - column: { name: margin_encrypted, value: "V4aoF1rKMDvrLTgmeKxR7NnEeHYRQCl7SxpU2iPPZyc=" }
               - column: { name: weight, value: "25.0" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
@@ -208,13 +207,13 @@ databaseChangeLog:
               - column: { name: category, value: "FURNITURE" }
               - column: { name: sku, value: "FURN-DSK-002" }
               - column: { name: selling_price, value: "599.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:400.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:199.99" }
+              - column: { name: purchase_price_encrypted, value: "SwNursuALPNhW4U8KdtJvP8zCyCDuzeN8w44FeE+wg4=" }
+              - column: { name: margin_encrypted, value: "h1NYdM2Bm7OO8L/XKrzXExMIoBkxc109CSEUR44Uy94=" }
               - column: { name: weight, value: "45.0" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
 
-        # FOOD CATEGORY
+        # FOOD
         - insert:
             tableName: products
             columns:
@@ -224,8 +223,8 @@ databaseChangeLog:
               - column: { name: category, value: "FOOD" }
               - column: { name: sku, value: "FOOD-OIL-001" }
               - column: { name: selling_price, value: "24.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:15.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:9.99" }
+              - column: { name: purchase_price_encrypted, value: "8AiAkP0hGkfbMgXXGqilw5oippSdTDJ+uNBDEo+wLLI=" }
+              - column: { name: margin_encrypted, value: "bjoYUxugqGnGJUdIgZphYvMwnXAw1kCdf2H/HMJBQ+0=" }
               - column: { name: weight, value: "1.0" }
               - column: { name: unit, value: "LITER" }
               - column: { name: is_active, valueBoolean: true }
@@ -239,13 +238,13 @@ databaseChangeLog:
               - column: { name: category, value: "FOOD" }
               - column: { name: sku, value: "FOOD-COF-002" }
               - column: { name: selling_price, value: "18.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:12.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:6.99" }
+              - column: { name: purchase_price_encrypted, value: "adj+uWwabz9aarqmqH/phuttdfGSvtpPJ1HeFdPHJEI=" }
+              - column: { name: margin_encrypted, value: "HewgiwdGau3znmsFEwkaOkn4CgbBDL7vFbCGV6AeymU=" }
               - column: { name: weight, value: "0.5" }
               - column: { name: unit, value: "KILOGRAM" }
               - column: { name: is_active, valueBoolean: true }
 
-        # CLOTHING CATEGORY
+        # CLOTHING
         - insert:
             tableName: products
             columns:
@@ -255,8 +254,8 @@ databaseChangeLog:
               - column: { name: category, value: "CLOTHING" }
               - column: { name: sku, value: "CLOT-TSH-001" }
               - column: { name: selling_price, value: "29.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:15.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:14.99" }
+              - column: { name: purchase_price_encrypted, value: "kQTVEybmIsGzVp2Gsr9eFHbbdna8vj45I6HXFuNhcls=" }
+              - column: { name: margin_encrypted, value: "+3NC31GUeJ0dOJa5yjwsw6st0C9sgGWzXFqaMXNtyYU=" }
               - column: { name: weight, value: "0.2" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
@@ -270,8 +269,8 @@ databaseChangeLog:
               - column: { name: category, value: "CLOTHING" }
               - column: { name: sku, value: "CLOT-SHO-002" }
               - column: { name: selling_price, value: "89.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:50.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:39.99" }
+              - column: { name: purchase_price_encrypted, value: "ljeRePdJTsdPOf5HYUVmXWUSYKM1XG+77THWbjZTnIA=" }
+              - column: { name: margin_encrypted, value: "hBfNrmOydiJNkTik/z1ncvhMFNwtQUOewQIG4XXGjgE=" }
               - column: { name: weight, value: "0.8" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }
@@ -286,8 +285,8 @@ databaseChangeLog:
               - column: { name: category, value: "HOME_GARDEN" }
               - column: { name: sku, value: "HOME-COO-001" }
               - column: { name: selling_price, value: "199.99" }
-              - column: { name: purchase_price_encrypted, value: "ENCRYPTED:120.00" }
-              - column: { name: margin_encrypted, value: "ENCRYPTED:79.99" }
+              - column: { name: purchase_price_encrypted, value: "Y3wflzJQkaPmIqAr5nzHHTPD/euUFnsu5huiQVFhkhs=" }
+              - column: { name: margin_encrypted, value: "BJvYOera3VlXfwf4Pcw9VCHj5MM8tQESe0zjSv78sic=" }
               - column: { name: weight, value: "8.5" }
               - column: { name: unit, value: "UNIT" }
               - column: { name: is_active, valueBoolean: true }

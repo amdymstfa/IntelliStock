@@ -36,7 +36,6 @@ public class Product {
   @Column(nullable = false, unique = true, length = 50)
   private String sku;
 
-
   @Column(nullable = false, precision = 10, scale = 2)
   private BigDecimal sellingPrice;
 
@@ -44,8 +43,7 @@ public class Product {
   @Column(name = "purchase_price_encrypted", nullable = false, columnDefinition = "TEXT")
   private BigDecimal purchasePrice;
 
-  @Convert(converter = EncryptionConverter.class)
-  @Column(name = "margin_encrypted", columnDefinition = "TEXT")
+  @Transient
   private BigDecimal margin;
 
   @Column(precision = 10, scale = 2)
@@ -64,4 +62,11 @@ public class Product {
 
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+  public BigDecimal getMargin() {
+    if (sellingPrice == null || purchasePrice == null) {
+      return BigDecimal.ZERO;
+    }
+    return sellingPrice.subtract(purchasePrice);
+  }
 }
